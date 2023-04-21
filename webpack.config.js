@@ -12,7 +12,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "The title of the HTML File (as seen in the browser)",
+      title: "Battleship",
     }),
   ],
   output: {
@@ -47,7 +47,7 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        exclude: /node_modules/,
+        exclude: /node_modules|tests/,
         use: {
           loader: "babel-loader",
           options: {
