@@ -10,6 +10,8 @@ const Ship = (name,length) => {
 
     const getLength = () => _length
 
+    const getHits = () => _hits
+
     const hit = () => {
         
         _hits += 1
@@ -24,6 +26,7 @@ const Ship = (name,length) => {
     return {
         getName,
         getLength,
+        getHits,
         hit,
         isSunk
     }
