@@ -2,7 +2,7 @@
 const Gameboard = () => {
 
     const _board = [] // Array of 100 squares representing the game board
-    let _ships = [] // Array of ships on the board
+    const _ships = [] // Array of ships on the board
     let _hits = 0 // Number of hits on the board
 
     // Get a Square
@@ -26,14 +26,32 @@ const Gameboard = () => {
         let i = 1
         let nextPos = startPos
         while (i <= ship.getLength()) {
+            
+            if (direction === "x") {
+                // Number has changed decade
+                if (Math.floor(nextPos / 10) !== Math.floor(startPos / 10)) {
+                    throw new Error("You are exceeding the limits of the board")
+                }
+            }
+            
+            if (direction === "y") {
+                if (nextPos > 99) {
+                    throw new Error("You are exceeding the limits of the board")
+                }
+            }
+            
             setSquare(nextPos,ship.getName())
+            
             if (direction === "x") {
                 nextPos += 1
             }
+            
             if (direction === "y") {
                 nextPos += 10
             }
+
             i += 1
+
         }
     }
 
