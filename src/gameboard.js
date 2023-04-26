@@ -3,7 +3,15 @@ const Gameboard = () => {
 
     const _board = [] // Array of 100 squares representing the game board
     const _ships = [] // Array of ships on the board
-    let _hits = 0 // Number of hits on the board
+    let _gameover = false
+
+    // Get if the game is over
+    const getGameOver = () => _gameover
+
+    // Set Game Over
+    const setGameOver = () => {
+        _gameover = true
+    }
 
     // Get a Square
     const getSquare = (square) => _board[square]
@@ -12,6 +20,9 @@ const Gameboard = () => {
     const setSquare = (num,value) => {
         _board[num] = value
     }
+
+    // Set a ship in the array of ships
+    const setShip = (ship) => _ships.push(ship)
     
     // Creates the board
     const createBoard = () => {
@@ -40,6 +51,7 @@ const Gameboard = () => {
                 }
             }
             
+            // Set square string to ship name
             setSquare(nextPos,ship.getName())
             
             if (direction === "x") {
@@ -53,13 +65,67 @@ const Gameboard = () => {
             i += 1
 
         }
+
+        // Place the ship in the array of ships
+        setShip(ship)
+    }
+
+    // Find and return a Ship in the board
+    const findShip = (shipName) => {
+        for (let i = 0; i < _ships.length; i += 1) {
+            if (_ships[i].getName() === shipName) {
+                return _ships[i]
+            }
+        }
+        // If no ship found, throw an error
+        throw new Error("No ship found with that name")
+    }
+
+    // Delete a ship from the ships array
+    const deleteShip = (shipName) => {
+        for (let i = 0; i < _ships.length; i += 1) {
+            if (_ships[i].getName() === shipName) {
+                _ships.splice(i,1)
+                if (_ships.length === 0) {
+                    setGameOver()
+                }
+                return
+            }
+        }
+        // If no ship found, throw an error
+        throw new Error("There is no ship with that name to delete")
+    }
+
+    // takes a pair of coordinates, determines whether or not the attack hit a ship and then 
+    // sends the ‘hit’ function to the correct ship, or records the coordinates 
+    // of the missed shot
+    const receiveAttack = (x,y) => {
+        
+        const squareNumber = (x * 10) + y
+
+        // Attack fails
+        if (getSquare(squareNumber) === "Water") {
+            setSquare(squareNumber,"Hit")
+        } else { // Attack hits
+            const hitShip = findShip(getSquare(squareNumber))
+            setSquare(squareNumber,`${hitShip.getName()}-Hit`)
+            hitShip.hit()
+
+            // Need to test if ship is sunk
+            if (hitShip.isSunk()) {
+                deleteShip(hitShip.getName())
+            }
+        }
+
     }
 
     return {
+        getGameOver,
         getSquare,
-        setSquare,
         createBoard,
-        placeShip
+        placeShip,
+        findShip,
+        receiveAttack
     }
 
 }

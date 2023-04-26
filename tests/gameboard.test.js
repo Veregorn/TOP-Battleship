@@ -1,19 +1,22 @@
 import Gameboard from "../src/gameboard";
 import Ship from "../src/ship";
 
-/* global test, expect */
+/* global test, expect, beforeEach */
+
+let myBoard;
+
+beforeEach(() => {
+  myBoard = Gameboard();
+  myBoard.createBoard();
+});
 
 test("Board has been created but there is no ships on it. All the squares are 'Water'", () => {
-    const myBoard = Gameboard()
-    myBoard.createBoard()
     for (let i = 0; i < 100; i += 1) {
         expect(myBoard.getSquare(i)).toBe("Water")
     }
 })
 
 test("A ship placed into the limits of the board is correctly placed (horizontally)", () => {
-    const myBoard = Gameboard()
-    myBoard.createBoard()
     const carrier = Ship("Carrier",5)
     let j = 25
     myBoard.placeShip(carrier,j,"x")
@@ -26,8 +29,6 @@ test("A ship placed into the limits of the board is correctly placed (horizontal
 })
 
 test("A ship placed into the limits of the board is correctly placed (vertically)", () => {
-    const myBoard = Gameboard()
-    myBoard.createBoard()
     const destroyer = Ship("Destroyer",3)
     let j = 70
     myBoard.placeShip(destroyer,j,"y")
@@ -40,19 +41,34 @@ test("A ship placed into the limits of the board is correctly placed (vertically
 })
 
 test("Placing a ship out of the limits (y axis)", () => {
-    const myBoard = Gameboard()
-    myBoard.createBoard()
-    const destroyer = Ship("Destroyer",3)
-    const j = 80
-    expect(() => myBoard.placeShip(destroyer,j,"y"))
+    expect(() => myBoard.placeShip(Ship("Destroyer",3),80,"y"))
         .toThrow(/^You are exceeding the limits of the board$/)
 })
 
 test("Placing a ship out of the limits (x axis)", () => {
-    const myBoard = Gameboard()
-    myBoard.createBoard()
-    const destroyer = Ship("Destroyer",3)
-    const j = 18
-    expect(() => myBoard.placeShip(destroyer,j,"x"))
+    expect(() => myBoard.placeShip(Ship("Destroyer",3),18,"x"))
         .toThrow(/^You are exceeding the limits of the board$/)
+})
+
+test("Receives and attack and a ship is hit", () => {
+    const battleship = Ship("Battleship",4)
+    myBoard.placeShip(battleship,74,"x")
+    myBoard.receiveAttack(7,7)
+    expect(battleship.getHits()).toBe(1)
+    expect(myBoard.getSquare(77)).toBe("Battleship-Hit")
+})
+
+test("Receives and attack and no ship is hit", () => {
+    myBoard.receiveAttack(7,7)
+    expect(myBoard.getSquare(77)).toBe("Hit")
+})
+
+test("All the ships have been sunk", () => {
+    const battleship = Ship("Battleship",4)
+    myBoard.placeShip(battleship,74,"x")
+    myBoard.receiveAttack(7,4)
+    myBoard.receiveAttack(7,5)
+    myBoard.receiveAttack(7,6)
+    myBoard.receiveAttack(7,7)
+    expect(myBoard.getGameOver()).toBeTruthy()
 })
