@@ -14,7 +14,9 @@ const Ship = (name,length) => {
 
     const hit = () => {
         
-        _hits += 1
+        if (_hits < _length) {
+            _hits += 1;
+        }
 
         if (_hits === _length) {
             _sunk = true

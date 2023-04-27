@@ -119,13 +119,31 @@ const Gameboard = () => {
 
     }
 
+    // Prints board into the console
+    const printBoard = () => {
+        for (let i = 0; i < _board.length; i += 10) {
+            console.log(
+                getSquare(i).padEnd(15," "),
+                getSquare(i+1).padEnd(15," "),
+                getSquare(i+2).padEnd(15," "),
+                getSquare(i+3).padEnd(15," "),
+                getSquare(i+4).padEnd(15," "),
+                getSquare(i+5).padEnd(15," "),
+                getSquare(i+6).padEnd(15," "),
+                getSquare(i+7).padEnd(15," "),
+                getSquare(i+8).padEnd(15," "),
+                getSquare(i+9).padEnd(15," "),"\n")
+        }
+    }
+
     return {
         getGameOver,
         getSquare,
         createBoard,
         placeShip,
         findShip,
-        receiveAttack
+        receiveAttack,
+        printBoard
     }
 
 }
