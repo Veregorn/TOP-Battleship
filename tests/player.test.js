@@ -6,7 +6,7 @@ import Ship from "../src/ship";
 const myShips = [Ship("Carrier",5),Ship("Battleship",4),Ship("Destroyer",3),Ship("Submarine",3),Ship("Patrol Boat",2)]
 const player1 = Player("AI",myShips)
 const player2 = Player("AI",myShips)
-const player3 = Player("Human",myShips)
+// const player3 = Player("Human",myShips)
 
 beforeEach(() => {
     player1.placeShips()

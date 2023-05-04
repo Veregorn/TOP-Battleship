@@ -125,20 +125,25 @@ const Gameboard = () => {
 
     }
 
-    // takes a pair of coordinates, determines whether or not the attack hit a ship and then 
+    // takes a square number, determines whether or not the attack hit a ship and then 
     // sends the ‘hit’ function to the correct ship, or records the coordinates 
     // of the missed shot
     const receiveAttack = (squareNumber) => {
         
         const square = getSquare(squareNumber)
+        let result = ""
 
         // Attack fails
         if (square === "Water") {
             setSquare(squareNumber,"Miss")
+            result = "Missed attack!"
+        } else if (square === "Miss" || square === "ShipHit") { // Invalid attack received
+            result = "This is an invalid attack"
         } else { // Attack hits
             const damagedShip = findShip(square)
             setSquare(squareNumber,"ShipHit")
             damagedShip.hit()
+            result = `A ${damagedShip.getName()} has been hit!`
 
             // Need to test if ship is sunk
             if (damagedShip.isSunk()) {
@@ -146,6 +151,8 @@ const Gameboard = () => {
                 checkGameOver()
             }
         }
+
+        return result
 
     }
 
