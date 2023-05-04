@@ -22,6 +22,9 @@ const Player = (type,ships) => {
 
     // Gets the attacks array
     const getAvailableAttacks = () => _availableAttacks
+
+    // Receives a square in returns true if that square hasn't been attacked yet
+    const isValidAttack = (square) => getAvailableAttacks().includes(square)
     
     const placeShips = () => {
 
