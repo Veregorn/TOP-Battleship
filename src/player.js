@@ -23,6 +23,9 @@ const Player = (type,ships) => {
     // Gets the attacks array
     const getAvailableAttacks = () => _availableAttacks
 
+    // Gets the square at 'pos' in the '_availableAttacks' array
+    const getAttackAtPos = (pos) => _availableAttacks[pos]
+
     // Receives a square in returns true if that square hasn't been attacked yet
     const isValidAttack = (square) => getAvailableAttacks().includes(square)
     
@@ -71,7 +74,7 @@ const Player = (type,ships) => {
     const generateAttack = () => {
             
             const index = generateRandomIndex()
-            const square = getAvailableAttacks[index]
+            const square = getAttackAtPos(index)
             deleteFromAvailableAttacks(index)
             return square
 
@@ -80,7 +83,8 @@ const Player = (type,ships) => {
     return {
         getGameBoard,
         placeShips,
-        generateAttack
+        generateAttack,
+        isValidAttack
     }
 
 }
