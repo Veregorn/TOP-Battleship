@@ -70,23 +70,23 @@ test("Checking ships array length after invalid placement", () => {
 test("Attack hits a ship and records the hit correctly", () => {
     const battleship = Ship("Battleship",4)
     myBoard.placeShip(battleship,74,"x")
-    myBoard.receiveAttack(7,7)
+    myBoard.receiveAttack(77)
     expect(battleship.getHits()).toBe(1)
     expect(myBoard.getSquare(77)).toBe("ShipHit")
 })
 
 test("Attack fails and records the miss correctly", () => {
-    myBoard.receiveAttack(7,7)
+    myBoard.receiveAttack(77)
     expect(myBoard.getSquare(77)).toBe("Miss")
 })
 
 test("All the ships have been sunk", () => {
     const battleship = Ship("Battleship",4)
     myBoard.placeShip(battleship,74,"x")
-    myBoard.receiveAttack(7,4)
-    myBoard.receiveAttack(7,5)
-    myBoard.receiveAttack(7,6)
-    myBoard.receiveAttack(7,7)
+    myBoard.receiveAttack(74)
+    myBoard.receiveAttack(75)
+    myBoard.receiveAttack(76)
+    myBoard.receiveAttack(77)
     expect(myBoard.getGameOver()).toBeTruthy()
     const ships = myBoard.getShips()
     expect(ships.length).toBe(0)
@@ -114,7 +114,7 @@ test("Attack hits one ship and misses another", () => {
     const submarine = Ship("Submarine",3)
     myBoard.placeShip(carrier,10,"x")
     myBoard.placeShip(submarine,15,"x")
-    myBoard.receiveAttack(1,4)
+    myBoard.receiveAttack(14)
 
     // Control that hits the Carrier
     expect(carrier.getHits()).toBe(1)
@@ -132,8 +132,8 @@ test("One ship is sunk while another remains on the board", () => {
     myBoard.placeShip(carrier,10,"x")
     myBoard.placeShip(submarine,15,"x")
 
-    for (let i = 0; i < 5; i += 1) {
-        myBoard.receiveAttack(1,i)
+    for (let i = 10; i < 15; i += 1) {
+        myBoard.receiveAttack(i)
     }
 
     // Carrier is sunk
@@ -192,9 +192,9 @@ test("Two ships can't be placed on the same square (overlap happens in the last 
 test("A ships is hit several times but isn't sunk", () => {
     const battleship = Ship("Battleship",4)
     myBoard.placeShip(battleship,74,"x")
-    myBoard.receiveAttack(7,4)
-    myBoard.receiveAttack(7,5)
-    myBoard.receiveAttack(7,6)
+    myBoard.receiveAttack(74)
+    myBoard.receiveAttack(75)
+    myBoard.receiveAttack(76)
     
     // Ship isn't sunk
     expect(battleship.isSunk()).toBeFalsy()
