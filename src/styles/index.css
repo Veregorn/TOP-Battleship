@@ -85,7 +85,71 @@ a:visited {
 
 #main {
     height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.glowing-button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 3em;
+    padding: 20px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.5s;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+  
+.glowing-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(76, 175, 80, 0.6);
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), 0 0 10px rgba(76, 175, 80, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(76, 175, 80, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), 0 0 10px rgba(76, 175, 80, 0.2);
+    }
+}
+
+.glowing-button {
+    animation: glowing 2s infinite;
+}
+
+/* SHIPS */
+
+.rectangle {
+    position: absolute;
+    top: 150px;
+    left: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #999;
+    border-radius: 10px;
+    padding: 10px;
+    width: 200px;
+    height: 40px;
+  }
+  
+  .circle {
+    width: 20px;
+    height: 20px;
+    background-color: #666;
+    border-radius: 50%;
+  }
+
+/* FOOTER */
 
 #footer {
     height: 10%;
