@@ -35,8 +35,14 @@ export let view = (function() {
 
     }
 
+    // Delete the content inside "main" <div>
+    function deleteMainUI() {
+        const main = getElement("main")
+        main.innerHTML = ""
+    }
+
     // Load initial UI screen
-    function loadMainUI() {
+    function loadCoverMainUI() {
     
         // Create a screen <div></div> that covers all the space available on browser nav
         const screen = createElement("div",null,"screen")
@@ -67,6 +73,9 @@ export let view = (function() {
         // Main content
         const glowingButton = createElement("button","glowing-button",null)
         glowingButton.textContent = "START"
+        glowingButton.addEventListener("click", () => {
+            deleteMainUI()
+        })
         main.appendChild(glowingButton)
 
         // SVG Ship shapes
@@ -95,7 +104,7 @@ export let view = (function() {
     return {
         createElement,
         getElement,
-        loadMainUI
+        loadCoverMainUI
     }
 
 })()
