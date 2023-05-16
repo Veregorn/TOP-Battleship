@@ -1,6 +1,9 @@
 // IMPORTS
-
-
+import carrierSvg from "./assets/graphics/carrier.svg";
+import submarineSvg from "./assets/graphics/submarine.svg";
+import battleshipSvg from "./assets/graphics/battleship.svg";
+import destroyerSvg from "./assets/graphics/destroyer.svg";
+import patrolSvg from "./assets/graphics/patrol-boat.svg";
 
 // A module (only one instance) for a View that control DOM manipulation
 // eslint-disable-next-line import/prefer-default-export, import/no-mutable-exports, prefer-const, func-names
@@ -45,6 +48,7 @@ export let view = (function() {
         const header = createElement("div",null,"header")
         const main = createElement("div",null,"main")
         const footer = createElement("div",null,"footer")
+        
         screen.appendChild(header)
         screen.appendChild(main)
         screen.appendChild(footer)
@@ -65,20 +69,26 @@ export let view = (function() {
         glowingButton.textContent = "START"
         main.appendChild(glowingButton)
 
-        // Aircraft carrier elements
-        const rectangle = createElement("div","rectangle",null)
-        const circle1 = createElement("div","circle",null)
-        const circle2 = createElement("div","circle",null)
-        const circle3 = createElement("div","circle",null)
-        const circle4 = createElement("div","circle",null)
-        const circle5 = createElement("div","circle",null)
-        rectangle.appendChild(circle1)
-        rectangle.appendChild(circle2)
-        rectangle.appendChild(circle3)
-        rectangle.appendChild(circle4)
-        rectangle.appendChild(circle5)
+        // SVG Ship shapes
+        const carrierShape = createElement("object",null,"carrier-shape")
+        carrierShape.data = carrierSvg
+        main.appendChild(carrierShape)
 
-        main.appendChild(rectangle)
+        const submarineShape = createElement("object",null,"submarine-shape")
+        submarineShape.data = submarineSvg
+        main.appendChild(submarineShape)
+
+        const battleshipShape = createElement("object",null,"battleship-shape")
+        battleshipShape.data = battleshipSvg
+        main.appendChild(battleshipShape)
+
+        const destroyerShape = createElement("object",null,"destroyer-shape")
+        destroyerShape.data = destroyerSvg
+        main.appendChild(destroyerShape)
+
+        const patrolShape = createElement("object",null,"patrol-shape")
+        patrolShape.data = patrolSvg
+        main.appendChild(patrolShape)
 
     }
 
