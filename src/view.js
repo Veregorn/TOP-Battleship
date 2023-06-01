@@ -41,7 +41,42 @@ export let view = (function() {
         main.innerHTML = ""
     }
 
-    // Load initial UI screen
+    // Loads game UI
+    function loadGameUI() {
+        
+        // SIDES
+        
+        const userSide = createElement("div","playerSide",null)
+        const computerSide = createElement("div","playerSide",null)
+
+        const main = getElement("main")
+        main.appendChild(userSide)
+        main.appendChild(computerSide)
+
+        // Headers
+
+        const userHeader = createElement("div","gameHeader","userGameHeader")
+        const computerHeader = createElement("div","gameHeader","computerGameHeader")
+
+        const userTitle = createElement("h2","playerTitle",null)
+        const computerTitle = createElement("h2","playerTitle",null)
+
+        userTitle.textContent = "YOUR FLEET"
+        computerTitle.textContent = "ENEMY FLEET"
+
+        userHeader.appendChild(userTitle)
+        computerHeader.appendChild(computerTitle)
+
+        userSide.appendChild(userHeader)
+        computerSide.appendChild(computerHeader)
+
+        // Gameboards
+
+        // Fleet Status Panels
+
+    }
+
+    // Loads initial UI screen
     function loadCoverMainUI() {
     
         // Create a screen <div></div> that covers all the space available on browser nav
@@ -75,6 +110,7 @@ export let view = (function() {
         glowingButton.textContent = "START"
         glowingButton.addEventListener("click", () => {
             deleteMainUI()
+            loadGameUI()
         })
         main.appendChild(glowingButton)
 
