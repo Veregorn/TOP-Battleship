@@ -72,7 +72,117 @@ export let view = (function() {
 
         // Gameboards
 
+        const userGameboardContainer = createElement("div","gameboardContainer","userGameboardContainer")
+        const computerGameboardContainer = createElement("div","gameboardContainer","computerGameboardContainer")
+
+        const userXHeader = createElement("div","xHeader",null)
+        const computerXHeader = createElement("div","xHeader",null)
+
+        // Generate the xHeader squares
+        for (let i = 0; i < 10; i += 1) {
+            const userXHeaderSquare = createElement("div","xHeaderSquare",null)
+            const computerXHeaderSquare = createElement("div","xHeaderSquare",null)
+            userXHeaderSquare.textContent = String.fromCharCode(65 + i)
+            computerXHeaderSquare.textContent = String.fromCharCode(65 + i)
+            userXHeader.appendChild(userXHeaderSquare)
+            computerXHeader.appendChild(computerXHeaderSquare)
+        }
+
+        const userBottomBoard = createElement("div","bottomBoard",null)
+        const computerBottomBoard = createElement("div","bottomBoard",null)
+
+        const userYHeader = createElement("div","yHeader",null)
+        const computerYHeader = createElement("div","yHeader",null)
+
+        // Generate the yHeader squares
+        for (let i = 0; i < 10; i += 1) {
+            const userYHeaderSquare = createElement("div","yHeaderSquare",null)
+            const computerYHeaderSquare = createElement("div","yHeaderSquare",null)
+            userYHeaderSquare.textContent = i + 1
+            computerYHeaderSquare.textContent = i + 1
+            userYHeader.appendChild(userYHeaderSquare)
+            computerYHeader.appendChild(computerYHeaderSquare)
+        }
+
+        const userGameboard = createElement("div","gameboardGrid","userGameboardGrid")
+        const computerGameboard = createElement("div","gameboardGrid","computerGameboardGrid")
+
+        // Generate the gameboard squares
+        for (let i = 0; i < 100; i += 1) {
+            const userGameboardSquare = createElement("div","gameboardSquare",null)
+            const computerGameboardSquare = createElement("div","gameboardSquare",null)
+            userGameboard.appendChild(userGameboardSquare)
+            computerGameboard.appendChild(computerGameboardSquare)
+        }
+
+        userGameboardContainer.appendChild(userXHeader)
+        userGameboardContainer.appendChild(userBottomBoard)
+        userBottomBoard.appendChild(userYHeader)
+        userBottomBoard.appendChild(userGameboard)
+
+        computerGameboardContainer.appendChild(computerXHeader)
+        computerGameboardContainer.appendChild(computerBottomBoard)
+        computerBottomBoard.appendChild(computerYHeader)
+        computerBottomBoard.appendChild(computerGameboard)
+
+        userSide.appendChild(userGameboardContainer)
+        computerSide.appendChild(computerGameboardContainer)
+
         // Fleet Status Panels
+        const userStatusPanelContainer = createElement("div","statusPanelContainer","userStatusPanelContainer")
+        const computerStatusPanelContainer = createElement("div","statusPanelContainer","computerStatusPanelContainer")
+
+        const userStatusHeader = createElement("div","statusHeader",null)
+        const computerStatusHeader = createElement("div","statusHeader",null)
+
+        const userStatusTitle = createElement("h2","panelTitle",null)
+        const computerStatusTitle = createElement("h2","panelTitle",null)
+
+        userStatusTitle.textContent = "Shipyard"
+        computerStatusTitle.textContent = "Shipyard"
+
+        userStatusHeader.appendChild(userStatusTitle)
+        computerStatusHeader.appendChild(computerStatusTitle)
+
+        userStatusPanelContainer.appendChild(userStatusHeader)
+        computerStatusPanelContainer.appendChild(computerStatusHeader)
+
+        const userStatusPanel = createElement("div","statusPanel","userStatusPanel")
+        const computerStatusPanel = createElement("div","statusPanel","computerStatusPanel")
+
+        userStatusPanelContainer.appendChild(userStatusPanel)
+        computerStatusPanelContainer.appendChild(computerStatusPanel)
+
+        userSide.appendChild(userStatusPanelContainer)
+        computerSide.appendChild(computerStatusPanelContainer)
+
+        // Create the user shipyard
+        const userCarrier = createElement("div","ship","userCarrier")
+        const userBattleship = createElement("div","ship","userBattleship")
+        const userDestroyer = createElement("div","ship","userDestroyer")
+        const userSubmarine = createElement("div","ship","userSubmarine")
+        const userBoat = createElement("div","ship","userBoat")
+
+        userStatusPanel.appendChild(userCarrier)
+        userStatusPanel.appendChild(userBattleship)
+        userStatusPanel.appendChild(userDestroyer)
+        userStatusPanel.appendChild(userSubmarine)
+        userStatusPanel.appendChild(userBoat)
+
+        // Create the enemy shipyard
+        const computerCarrier = createElement("div","ship","computerCarrier")
+        const computerBattleship = createElement("div","ship","computerBattleship")
+        const computerDestroyer = createElement("div","ship","computerDestroyer")
+        const computerSubmarine = createElement("div","ship","computerSubmarine")
+        const computerBoat = createElement("div","ship","computerBoat")
+
+        computerStatusPanel.appendChild(computerCarrier)
+        computerStatusPanel.appendChild(computerBattleship)
+        computerStatusPanel.appendChild(computerDestroyer)
+        computerStatusPanel.appendChild(computerSubmarine)
+        computerStatusPanel.appendChild(computerBoat)
+
+        
 
     }
 

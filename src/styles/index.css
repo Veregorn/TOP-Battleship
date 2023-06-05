@@ -209,14 +209,122 @@ a:visited {
 
 .playerSide {
     width: 50%;
-    height: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     padding: 5%;
     align-items: center;
+    justify-content: center;
 }
 
+.gameHeader {
+    width: 440px;
+    font-size: 1.5em;
+    font-family: 'Bruno Ace';
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
 
+#userGameHeader {
+    background-color: #FC1159;
+}
+
+#computerGameHeader{
+    background-color: #727D95;
+}
+
+.gameboardContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.xHeader {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 2.5em;
+}
+
+.xHeaderSquare {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bruno Ace';
+    font-size: 1em;
+}
+
+.bottomBoard {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.yHeader {
+    display: flex;
+    flex-direction: column;
+}
+
+.yHeaderSquare {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bruno Ace';
+    font-size: 1em;
+}
+
+.gameboardGrid {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.gameboardSquare {
+    width: 38px;
+    height: 38px;
+    border: solid 1px #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bruno Ace';
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #a1dcff;
+}
+
+.gameboardSquare:hover {
+    background-color: #1b88e7;
+}
+
+/* SHIPYARD */
+
+.statusPanelContainer {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.panelTitle {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    rotate: 180deg;
+    font-family: 'Bruno Ace';
+    font-size: 1em;
+}
 
 /* FOOTER */
 
