@@ -157,11 +157,13 @@ export let view = (function() {
         computerSide.appendChild(computerStatusPanelContainer)
 
         // Create the user shipyard
-        const userCarrier = createElement("div","ship","userCarrier")
-        const userBattleship = createElement("div","ship","userBattleship")
-        const userDestroyer = createElement("div","ship","userDestroyer")
-        const userSubmarine = createElement("div","ship","userSubmarine")
-        const userBoat = createElement("div","ship","userBoat")
+        const userCarrier = createElement("div","carrier","userCarrier")
+        const userBattleship = createElement("div","battleship","userBattleship")
+        userBattleship.setAttribute("background-image","url('./assets/graphics/battleship.svg')")
+        userBattleship.setAttribute("draggable","true")
+        const userDestroyer = createElement("div","destroyer","userDestroyer")
+        const userSubmarine = createElement("div","submarine","userSubmarine")
+        const userBoat = createElement("div","boat","userBoat")
 
         userStatusPanel.appendChild(userCarrier)
         userStatusPanel.appendChild(userBattleship)
@@ -170,11 +172,11 @@ export let view = (function() {
         userStatusPanel.appendChild(userBoat)
 
         // Create the enemy shipyard
-        const computerCarrier = createElement("div","ship","computerCarrier")
-        const computerBattleship = createElement("div","ship","computerBattleship")
-        const computerDestroyer = createElement("div","ship","computerDestroyer")
-        const computerSubmarine = createElement("div","ship","computerSubmarine")
-        const computerBoat = createElement("div","ship","computerBoat")
+        const computerCarrier = createElement("div","carrier","computerCarrier")
+        const computerBattleship = createElement("div","battleship","computerBattleship")
+        const computerDestroyer = createElement("div","destroyer","computerDestroyer")
+        const computerSubmarine = createElement("div","submarine","computerSubmarine")
+        const computerBoat = createElement("div","boat","computerBoat")
 
         computerStatusPanel.appendChild(computerCarrier)
         computerStatusPanel.appendChild(computerBattleship)
@@ -182,7 +184,31 @@ export let view = (function() {
         computerStatusPanel.appendChild(computerSubmarine)
         computerStatusPanel.appendChild(computerBoat)
 
-        
+        // SVG Ship shapes
+        const carrierShape = createElement("object","carrier",null)
+        carrierShape.data = carrierSvg
+        userCarrier.appendChild(carrierShape)
+        computerCarrier.appendChild(carrierShape.cloneNode(true))
+
+        // const battleshipShape = createElement("object","battleship",null)
+        // battleshipShape.data = battleshipSvg
+        // userBattleship.appendChild(battleshipShape)
+        // computerBattleship.appendChild(battleshipShape.cloneNode(true))
+
+        const destroyerShape = createElement("object","destroyer",null)
+        destroyerShape.data = destroyerSvg
+        userDestroyer.appendChild(destroyerShape)
+        computerDestroyer.appendChild(destroyerShape.cloneNode(true))
+
+        const submarineShape = createElement("object","submarine",null)
+        submarineShape.data = submarineSvg
+        userSubmarine.appendChild(submarineShape)
+        computerSubmarine.appendChild(submarineShape.cloneNode(true))
+
+        const boatShape = createElement("object","boat",null)
+        boatShape.data = patrolSvg
+        userBoat.appendChild(boatShape)
+        computerBoat.appendChild(boatShape.cloneNode(true))
 
     }
 
