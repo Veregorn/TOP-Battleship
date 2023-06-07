@@ -214,8 +214,9 @@ a:visited {
     flex-direction: column;
     padding: 5%;
     align-items: center;
-    justify-content: center;
-    gap: 4em;
+    justify-content: flex-start;
+    gap: 2em;
+    margin-top: 5em;
 }
 
 .gameHeader {
@@ -365,6 +366,13 @@ a:visited {
 
 .shipShape {
     cursor: move;
+}
+
+.instructions {
+    width: 100%;
+    font-family: 'Bruno Ace';
+    font-size: 0.8em;
+    line-height: 1.5em;
 }
 
 /* FOOTER */

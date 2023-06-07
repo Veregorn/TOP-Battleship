@@ -410,6 +410,11 @@ export let view = (function() {
         computerStatusPanel.appendChild(computerSubmarine)
         computerStatusPanel.appendChild(computerBoat)
 
+        // Create a div to show instructions to the user
+        const instructions = createElement("div","instructions",null)
+        instructions.textContent = "Drag and drop your ships to place them on the board. Click on the board to rotate them."
+        userSide.appendChild(instructions)
+
     }
 
     // Loads initial UI screen
