@@ -41,6 +41,21 @@ export let view = (function() {
         main.innerHTML = ""
     }
 
+    // Functions to make SVGs draggable
+    /* function allowDrop(ev) {
+        ev.preventDefault();
+    }
+    
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+    
+    function drop(ev) {
+        ev.preventDefault();
+        const data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+    } */
+
     // Loads game UI
     function loadGameUI() {
         
@@ -158,13 +173,117 @@ export let view = (function() {
 
         // Create the user shipyard
         const userCarrier = createElement("div","carrier","userCarrier")
+        userCarrier.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 188 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1.13728,0,0,0.751167,-14.2455,-0.759376)">
+                    <path d="M175.177,15.017C175.177,9.503 170.7,5.026 165.186,5.026L25.14,5.026C19.626,5.026 15.149,9.503 15.149,15.017L15.149,34.998C15.149,40.512 19.626,44.989 25.14,44.989L165.186,44.989C170.7,44.989 175.177,40.512 175.177,34.998L175.177,15.017Z" style="fill:rgb(153,153,153);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-11.1927,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.1726,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1498,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,26.8145,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,64.7949,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        userCarrier.setAttribute("draggable","true")
         const userBattleship = createElement("div","battleship","userBattleship")
-        userBattleship.setAttribute("background-image","url('./assets/graphics/battleship.svg')")
+        userBattleship.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 150 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1,0,0,1,-20.1628,-7.00741)">
+                    <g transform="matrix(1.28863,0,0,0.7503,9.3355,2.48393)">
+                        <path d="M96.95,43.042C91.743,45.635 85.257,47.968 78.066,49.982L22.671,49.982C15.888,44.911 10.744,37.739 10.73,30.026C10.717,22.308 15.841,15.115 22.612,10.019L78.034,10.019C84.843,11.946 91.021,14.159 96.085,16.577L95.936,16.556C90.763,16.556 86.563,22.522 86.563,29.872C86.563,37.221 90.763,43.188 95.936,43.188L96.95,43.042Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(7.33502,0,0,1.46121,-639.244,-19.2598)">
+                        <path d="M104.188,23.611C103.676,22.236 102.998,21.032 102.193,20.025C104.262,21.338 105.969,22.708 107.248,24.15C106.803,25.254 106.499,27.56 106.499,30.219C106.499,32.705 106.765,34.883 107.164,36.058C105.749,37.629 103.828,39.119 101.488,40.545C102.501,39.503 103.356,38.176 103.996,36.612C104.151,36.907 104.321,37.057 104.498,37.057C105.298,37.057 105.948,34.008 105.948,30.252C105.948,26.497 105.298,23.448 104.498,23.448C104.392,23.448 104.288,23.501 104.188,23.611Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(7.33502,0,0,1.46121,-639.244,-19.2598)">
+                        <path d="M109.01,26.579C109.624,27.718 109.946,28.889 109.944,30.072C109.942,31.212 109.639,32.341 109.064,33.448C109.17,32.493 109.229,31.39 109.229,30.219C109.229,28.872 109.151,27.615 109.01,26.579Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                </g>
+                <g transform="matrix(1,0,0,1,-60.1736,2.9832)">
+                    <g transform="matrix(1,0,0,1,11.1098,-0.110922)">
+                        <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,60.1736,-2.9832)">
+                        <path d="M104.818,8.234C110.081,10.923 113.036,14.056 113.036,17.382C113.036,21 109.54,24.388 103.403,27.23C99.34,25.858 96.45,22.211 96.45,17.937C96.45,13.179 100.035,9.196 104.818,8.234Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,60.1736,-2.9832)">
+                        <path d="M104.818,8.234C105.548,8.073 106.308,7.995 107.088,7.995C112.96,7.995 117.727,12.45 117.727,17.937C117.727,23.425 112.96,27.88 107.088,27.88C105.789,27.88 104.543,27.662 103.403,27.23C109.54,24.388 113.036,21 113.036,17.382C113.036,14.056 110.081,10.923 104.818,8.234Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,86.7788,-0.110922)">
+                        <path d="M100.657,6.149C106.011,7.304 110.349,8.487 113.58,9.698C114.613,11.212 115.185,13.048 115.185,15.017C115.185,16.728 114.753,18.34 113.972,19.735C110.581,21.042 105.901,22.331 100.037,23.549C97.11,21.832 95.163,18.65 95.163,15.017C95.163,11.132 97.389,7.762 100.657,6.149Z" style="fill:rgb(102,102,102);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,48.7987,-0.0002)">
+                        <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                    </g>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1182,2.87228)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
         userBattleship.setAttribute("draggable","true")
         const userDestroyer = createElement("div","destroyer","userDestroyer")
+        userDestroyer.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1,0,0,1,-39.1628,-7.00741)">
+                    <g transform="matrix(1.06806,0,0,0.7503,30.7195,2.48393)">
+                        <path d="M96.95,43.042C91.743,45.635 85.257,47.968 78.066,49.982L22.671,49.982C15.888,44.911 10.744,37.739 10.73,30.026C10.717,22.308 15.841,15.115 22.612,10.019L78.034,10.019C84.843,11.946 91.021,14.159 96.085,16.577L95.936,16.556C90.763,16.556 86.563,22.522 86.563,29.872C86.563,37.221 90.763,43.188 95.936,43.188L96.95,43.042Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(1.06806,0,0,0.7503,30.7195,2.48393)">
+                        <path d="M102.193,20.025C107.079,23.126 109.95,26.546 109.944,30.072C109.937,33.758 106.785,37.318 101.488,40.545C103.812,38.153 105.309,34.259 105.309,29.872C105.309,25.953 104.115,22.428 102.193,20.025Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                </g>
+                <g transform="matrix(1,0,0,1,-11.1517,2.87228)">
+                    <path d="M105.334,5.042C107.773,5.859 109.97,6.707 111.857,7.629C113.91,9.432 115.185,12.077 115.185,15.017C115.185,18.308 113.587,21.23 111.104,23.025L110.391,23.365L106.257,24.899L105.174,25.008C99.649,25.008 95.163,20.531 95.163,15.017C95.163,9.503 99.649,5.026 105.174,5.026L105.334,5.042Z" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.174,2.87228)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1881,2.87228)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        userDestroyer.setAttribute("draggable","true")
         const userSubmarine = createElement("div","submarine","userSubmarine")
+        userSubmarine.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1.06836,0,0,0.752001,-40.4103,-4.54153)">
+                    <path d="M128.116,10.019C134.814,15.108 139.865,22.253 139.851,29.915C139.837,37.685 134.619,44.904 127.762,49.982L52.691,49.982C45.834,44.904 40.616,37.685 40.602,29.915C40.588,22.253 45.639,15.108 52.337,10.019L128.116,10.019Z" style="fill:rgb(153,153,153);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-11.19,3.00157)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.1896,3.00157)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1672,3.00157)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        userSubmarine.setAttribute("draggable","true")
         const userBoat = createElement("div","boat","userBoat")
-
+        userBoat.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 74 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(0.976973,0,0,0.752048,-7.06641,-4.56753)">
+                    <path d="M48.034,10.019C66.253,15.178 79.957,22.374 79.944,30.072C79.93,37.754 66.253,44.889 48.066,49.982L23.908,49.982C16.201,44.911 10.356,37.736 10.342,30.018C10.328,22.305 16.139,15.115 23.817,10.019L48.034,10.019Z" style="fill:rgb(153,153,153);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.1752,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1661,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        userBoat.setAttribute("draggable","true")
         userStatusPanel.appendChild(userCarrier)
         userStatusPanel.appendChild(userBattleship)
         userStatusPanel.appendChild(userDestroyer)
@@ -173,42 +292,123 @@ export let view = (function() {
 
         // Create the enemy shipyard
         const computerCarrier = createElement("div","carrier","computerCarrier")
+        computerCarrier.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 188 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1.13728,0,0,0.751167,-14.2455,-0.759376)">
+                    <path d="M175.177,15.017C175.177,9.503 170.7,5.026 165.186,5.026L25.14,5.026C19.626,5.026 15.149,9.503 15.149,15.017L15.149,34.998C15.149,40.512 19.626,44.989 25.14,44.989L165.186,44.989C170.7,44.989 175.177,40.512 175.177,34.998L175.177,15.017Z" style="fill:rgb(153,153,153);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-11.1927,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.1726,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1498,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,26.8145,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,64.7949,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        computerCarrier.setAttribute("draggable","true")
         const computerBattleship = createElement("div","battleship","computerBattleship")
+        computerBattleship.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 150 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1,0,0,1,-20.1628,-7.00741)">
+                    <g transform="matrix(1.28863,0,0,0.7503,9.3355,2.48393)">
+                        <path d="M96.95,43.042C91.743,45.635 85.257,47.968 78.066,49.982L22.671,49.982C15.888,44.911 10.744,37.739 10.73,30.026C10.717,22.308 15.841,15.115 22.612,10.019L78.034,10.019C84.843,11.946 91.021,14.159 96.085,16.577L95.936,16.556C90.763,16.556 86.563,22.522 86.563,29.872C86.563,37.221 90.763,43.188 95.936,43.188L96.95,43.042Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(7.33502,0,0,1.46121,-639.244,-19.2598)">
+                        <path d="M104.188,23.611C103.676,22.236 102.998,21.032 102.193,20.025C104.262,21.338 105.969,22.708 107.248,24.15C106.803,25.254 106.499,27.56 106.499,30.219C106.499,32.705 106.765,34.883 107.164,36.058C105.749,37.629 103.828,39.119 101.488,40.545C102.501,39.503 103.356,38.176 103.996,36.612C104.151,36.907 104.321,37.057 104.498,37.057C105.298,37.057 105.948,34.008 105.948,30.252C105.948,26.497 105.298,23.448 104.498,23.448C104.392,23.448 104.288,23.501 104.188,23.611Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(7.33502,0,0,1.46121,-639.244,-19.2598)">
+                        <path d="M109.01,26.579C109.624,27.718 109.946,28.889 109.944,30.072C109.942,31.212 109.639,32.341 109.064,33.448C109.17,32.493 109.229,31.39 109.229,30.219C109.229,28.872 109.151,27.615 109.01,26.579Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                </g>
+                <g transform="matrix(1,0,0,1,-60.1736,2.9832)">
+                    <g transform="matrix(1,0,0,1,11.1098,-0.110922)">
+                        <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,60.1736,-2.9832)">
+                        <path d="M104.818,8.234C110.081,10.923 113.036,14.056 113.036,17.382C113.036,21 109.54,24.388 103.403,27.23C99.34,25.858 96.45,22.211 96.45,17.937C96.45,13.179 100.035,9.196 104.818,8.234Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,60.1736,-2.9832)">
+                        <path d="M104.818,8.234C105.548,8.073 106.308,7.995 107.088,7.995C112.96,7.995 117.727,12.45 117.727,17.937C117.727,23.425 112.96,27.88 107.088,27.88C105.789,27.88 104.543,27.662 103.403,27.23C109.54,24.388 113.036,21 113.036,17.382C113.036,14.056 110.081,10.923 104.818,8.234Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,86.7788,-0.110922)">
+                        <path d="M100.657,6.149C106.011,7.304 110.349,8.487 113.58,9.698C114.613,11.212 115.185,13.048 115.185,15.017C115.185,16.728 114.753,18.34 113.972,19.735C110.581,21.042 105.901,22.331 100.037,23.549C97.11,21.832 95.163,18.65 95.163,15.017C95.163,11.132 97.389,7.762 100.657,6.149Z" style="fill:rgb(102,102,102);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,48.7987,-0.0002)">
+                        <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                    </g>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1182,2.87228)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        computerBattleship.setAttribute("draggable", "true")
         const computerDestroyer = createElement("div","destroyer","computerDestroyer")
+        computerDestroyer.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1,0,0,1,-39.1628,-7.00741)">
+                    <g transform="matrix(1.06806,0,0,0.7503,30.7195,2.48393)">
+                        <path d="M96.95,43.042C91.743,45.635 85.257,47.968 78.066,49.982L22.671,49.982C15.888,44.911 10.744,37.739 10.73,30.026C10.717,22.308 15.841,15.115 22.612,10.019L78.034,10.019C84.843,11.946 91.021,14.159 96.085,16.577L95.936,16.556C90.763,16.556 86.563,22.522 86.563,29.872C86.563,37.221 90.763,43.188 95.936,43.188L96.95,43.042Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                    <g transform="matrix(1.06806,0,0,0.7503,30.7195,2.48393)">
+                        <path d="M102.193,20.025C107.079,23.126 109.95,26.546 109.944,30.072C109.937,33.758 106.785,37.318 101.488,40.545C103.812,38.153 105.309,34.259 105.309,29.872C105.309,25.953 104.115,22.428 102.193,20.025Z" style="fill:rgb(153,153,153);"/>
+                    </g>
+                </g>
+                <g transform="matrix(1,0,0,1,-11.1517,2.87228)">
+                    <path d="M105.334,5.042C107.773,5.859 109.97,6.707 111.857,7.629C113.91,9.432 115.185,12.077 115.185,15.017C115.185,18.308 113.587,21.23 111.104,23.025L110.391,23.365L106.257,24.899L105.174,25.008C99.649,25.008 95.163,20.531 95.163,15.017C95.163,9.503 99.649,5.026 105.174,5.026L105.334,5.042Z" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.174,2.87228)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1881,2.87228)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        computerDestroyer.setAttribute("draggable","true")
         const computerSubmarine = createElement("div","submarine","computerSubmarine")
+        computerSubmarine.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(1.06836,0,0,0.752001,-40.4103,-4.54153)">
+                    <path d="M128.116,10.019C134.814,15.108 139.865,22.253 139.851,29.915C139.837,37.685 134.619,44.904 127.762,49.982L52.691,49.982C45.834,44.904 40.616,37.685 40.602,29.915C40.588,22.253 45.639,15.108 52.337,10.019L128.116,10.019Z" style="fill:rgb(153,153,153);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-11.19,3.00157)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.1896,3.00157)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1672,3.00157)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        computerSubmarine.setAttribute("draggable","true")
         const computerBoat = createElement("div","boat","computerBoat")
+        computerBoat.innerHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 74 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                <g transform="matrix(0.976973,0,0,0.752048,-7.06641,-4.56753)">
+                    <path d="M48.034,10.019C66.253,15.178 79.957,22.374 79.944,30.072C79.93,37.754 66.253,44.889 48.066,49.982L23.908,49.982C16.201,44.911 10.356,37.736 10.342,30.018C10.328,22.305 16.139,15.115 23.817,10.019L48.034,10.019Z" style="fill:rgb(153,153,153);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-49.1752,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-87.1661,2.983)">
+                    <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
+                </g>
+            </svg>`
+        computerBoat.setAttribute("draggable","true")
 
         computerStatusPanel.appendChild(computerCarrier)
         computerStatusPanel.appendChild(computerBattleship)
         computerStatusPanel.appendChild(computerDestroyer)
         computerStatusPanel.appendChild(computerSubmarine)
         computerStatusPanel.appendChild(computerBoat)
-
-        // SVG Ship shapes
-        const carrierShape = createElement("object","carrier",null)
-        carrierShape.data = carrierSvg
-        userCarrier.appendChild(carrierShape)
-        computerCarrier.appendChild(carrierShape.cloneNode(true))
-
-        // const battleshipShape = createElement("object","battleship",null)
-        // battleshipShape.data = battleshipSvg
-        // userBattleship.appendChild(battleshipShape)
-        // computerBattleship.appendChild(battleshipShape.cloneNode(true))
-
-        const destroyerShape = createElement("object","destroyer",null)
-        destroyerShape.data = destroyerSvg
-        userDestroyer.appendChild(destroyerShape)
-        computerDestroyer.appendChild(destroyerShape.cloneNode(true))
-
-        const submarineShape = createElement("object","submarine",null)
-        submarineShape.data = submarineSvg
-        userSubmarine.appendChild(submarineShape)
-        computerSubmarine.appendChild(submarineShape.cloneNode(true))
-
-        const boatShape = createElement("object","boat",null)
-        boatShape.data = patrolSvg
-        userBoat.appendChild(boatShape)
-        computerBoat.appendChild(boatShape.cloneNode(true))
 
     }
 
