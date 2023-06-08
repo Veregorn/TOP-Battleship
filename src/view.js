@@ -10,10 +10,6 @@ import patrolSvg from "./assets/graphics/patrol-boat.svg";
 // eslint-disable-next-line import/prefer-default-export, import/no-mutable-exports, prefer-const, func-names
 export let view = (function() {
 
-    // Variables para almacenar la diferencia entre la posición del cursor y la esquina superior izquierda del barco
-    let offsetX
-    let offsetY
-
     // Create an element with an optional CSS class and optional CSS id
     function createElement(tag, className, id) {
         
@@ -47,27 +43,27 @@ export let view = (function() {
     }
 
     // Drag and drop functions
-    function dragStart(event) {
+    /* function dragStart(event) {
         
         console.log("dragStart")
         
         event.dataTransfer.setData("text/plain", event.target.id) // Save the id of the element being dragged
 
-    }
+    } */
 
-    function dragOver(event) {
+    /* function dragOver(event) {
         
         event.preventDefault()
 
         // const data = event.dataTransfer.getData("text/plain")
         // const draggedShip = document.getElementById(data)
 
-    }
+    } */
 
-    function dragEnter(event) {
+    /* function dragEnter(event) {
 
         console.log("dragenter")
-    }
+    } */
 
     function dragEnd() {
         
@@ -75,13 +71,13 @@ export let view = (function() {
 
     }
 
-    function dragLeave() {
+    /* function dragLeave() {
 
         console.log("dragleave")
 
-    }
+    } */
 
-    function dragDrop(event) {
+    /* function dragDrop(event) {
 
         event.preventDefault()
 
@@ -97,13 +93,13 @@ export let view = (function() {
         draggedShip.style.opacity = "0.7"
         // event.target.appendChild(document.getElementById(draggedShip))
 
-    }
+    } */
 
-    function rotateShip() {
+    /* function rotateShip() {
 
         console.log("rotate")
 
-    }
+    } */
 
     // Loads game UI
     function loadGameUI() {
@@ -244,7 +240,7 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        userCarrier.setAttribute("draggable","true")
+        // userCarrier.setAttribute("draggable","true")
         const userBattleship = createElement("div","battleship","userBattleship")
         userBattleship.classList.add("userShip")
         userBattleship.innerHTML = `
@@ -281,7 +277,7 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        userBattleship.setAttribute("draggable","true")
+        // userBattleship.setAttribute("draggable","true")
         const userDestroyer = createElement("div","destroyer","userDestroyer")
         userDestroyer.classList.add("userShip")
         userDestroyer.innerHTML = `
@@ -304,7 +300,7 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        userDestroyer.setAttribute("draggable","true")
+        // userDestroyer.setAttribute("draggable","true")
         const userSubmarine = createElement("div","submarine","userSubmarine")
         userSubmarine.classList.add("userShip")
         userSubmarine.innerHTML = `
@@ -322,7 +318,7 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        userSubmarine.setAttribute("draggable","true")
+        // userSubmarine.setAttribute("draggable","true")
         const userBoat = createElement("div","boat","userBoat")
         userBoat.classList.add("userShip")
         userBoat.innerHTML = `
@@ -337,7 +333,7 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        userBoat.setAttribute("draggable","true")
+        // userBoat.setAttribute("draggable","true")
         userStatusPanel.appendChild(userCarrier)
         userStatusPanel.appendChild(userBattleship)
         userStatusPanel.appendChild(userDestroyer)
@@ -470,22 +466,88 @@ export let view = (function() {
         userSide.appendChild(instructions)
 
         // Adding event listeners to user ships
-        const userShips = document.querySelectorAll(".userShip")
+        /* const userShips = document.querySelectorAll(".userShip")
         userShips.forEach(ship => {
             ship.addEventListener("dragstart",dragStart)
             offsetX = ship.getBoundingClientRect().width/2
             offsetY = ship.getBoundingClientRect().height/2
             ship.addEventListener("dragend",dragEnd)
-        })
+        }) */
 
         // Adding event listeners to user board
-        const userBoard = document.querySelector("#userGameboardGrid")
+        /* const userBoard = document.querySelector("#userGameboardGrid")
         userBoard.addEventListener("dragover",dragOver)
         userBoard.addEventListener("dragenter",dragEnter)
         userBoard.addEventListener("dragleave",dragLeave)
         userBoard.addEventListener("drop",dragDrop)
-        userBoard.addEventListener("click",rotateShip)
+        userBoard.addEventListener("click",rotateShip) */
 
+        // Variables to store ship position
+        let carrierPosX = 0
+        let carrierPosY = 0
+        let battleshipPosX = 0
+        let battleshipPosY = 0
+        let destroyerPosX = 0
+        let destroyerPosY = 0
+        let submarinePosX = 0
+        let submarinePosY = 0
+        let boatPosX = 0
+        let boatPosY = 0
+
+        // Adding code to use "interact.js" library
+        interact(".userShip")
+            .draggable({
+                modifiers: [
+                    interact.modifiers.restrictRect({
+                        restriction: "#userGameboardGrid",
+                        endOnly: true
+                    })
+                ],
+                listeners: {
+                    move (event) {
+                        if (event.target.id === "userCarrier") {
+                            carrierPosX += event.dx
+                            carrierPosY += event.dy
+                            event.target.style.transform = `translate(${carrierPosX}px,${carrierPosY}px)`
+                        } else if (event.target.id === "userBattleship") {
+                            battleshipPosX += event.dx
+                            battleshipPosY += event.dy
+                            event.target.style.transform = `translate(${battleshipPosX}px,${battleshipPosY}px)`
+                        } else if (event.target.id === "userDestroyer") {
+                            destroyerPosX += event.dx
+                            destroyerPosY += event.dy
+                            event.target.style.transform = `translate(${destroyerPosX}px,${destroyerPosY}px)`
+                        } else if (event.target.id === "userSubmarine") {
+                            submarinePosX += event.dx
+                            submarinePosY += event.dy
+                            event.target.style.transform = `translate(${submarinePosX}px,${submarinePosY}px)`
+                        } else if (event.target.id === "userBoat") {
+                            boatPosX += event.dx
+                            boatPosY += event.dy
+                            event.target.style.transform = `translate(${boatPosX}px,${boatPosY}px)`
+                        }
+                    },
+                    end (event) {
+                        dragEnd(event)
+                    }
+                }
+            })
+
+        interact("#userGameboardGrid")
+            .dropzone({
+                accept: ".userShip",
+                overlap: 0.75,
+                ondropactivate: function (event) {
+                    event.target.classList.add("drop-active")
+                }
+            })
+            .on("dragenter", function (event) {
+                const draggableElement = event.relatedTarget
+                const dropzoneElement = event.target
+                dropzoneElement.classList.add("drop-target")
+                draggableElement.classList.add("can-drop")
+            })
+                
     }
 
     // Loads initial UI screen
