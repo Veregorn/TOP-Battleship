@@ -1,4 +1,5 @@
 // IMPORTS
+import interact from "interactjs";
 import carrierSvg from "./assets/graphics/carrier.svg";
 import submarineSvg from "./assets/graphics/submarine.svg";
 import battleshipSvg from "./assets/graphics/battleship.svg";
@@ -8,6 +9,10 @@ import patrolSvg from "./assets/graphics/patrol-boat.svg";
 // A module (only one instance) for a View that control DOM manipulation
 // eslint-disable-next-line import/prefer-default-export, import/no-mutable-exports, prefer-const, func-names
 export let view = (function() {
+
+    // Variables para almacenar la diferencia entre la posición del cursor y la esquina superior izquierda del barco
+    let offsetX
+    let offsetY
 
     // Create an element with an optional CSS class and optional CSS id
     function createElement(tag, className, id) {
@@ -41,20 +46,64 @@ export let view = (function() {
         main.innerHTML = ""
     }
 
-    // Functions to make SVGs draggable
-    /* function allowDrop(ev) {
-        ev.preventDefault();
+    // Drag and drop functions
+    function dragStart(event) {
+        
+        console.log("dragStart")
+        
+        event.dataTransfer.setData("text/plain", event.target.id) // Save the id of the element being dragged
+
     }
-    
-    function drag(ev) {
-        ev.dataTransfer.setData("text", ev.target.id);
+
+    function dragOver(event) {
+        
+        event.preventDefault()
+
+        // const data = event.dataTransfer.getData("text/plain")
+        // const draggedShip = document.getElementById(data)
+
     }
-    
-    function drop(ev) {
-        ev.preventDefault();
-        const data = ev.dataTransfer.getData("text");
-        ev.target.appendChild(document.getElementById(data));
-    } */
+
+    function dragEnter(event) {
+
+        console.log("dragenter")
+    }
+
+    function dragEnd() {
+        
+        console.log("dragend")
+
+    }
+
+    function dragLeave() {
+
+        console.log("dragleave")
+
+    }
+
+    function dragDrop(event) {
+
+        event.preventDefault()
+
+        // Obtén la posición del div en el que se soltó el barco
+        const x = event.clientX - offsetX
+        const y = event.clientY - offsetY
+
+        const draggedShipId = event.dataTransfer.getData("text/plain")
+        const draggedShip = document.getElementById(draggedShipId)
+        draggedShip.style.position = "absolute"
+        draggedShip.style.left = x-55 + "px"
+        draggedShip.style.top = y-128 + "px"
+        draggedShip.style.opacity = "0.7"
+        // event.target.appendChild(document.getElementById(draggedShip))
+
+    }
+
+    function rotateShip() {
+
+        console.log("rotate")
+
+    }
 
     // Loads game UI
     function loadGameUI() {
@@ -173,6 +222,7 @@ export let view = (function() {
 
         // Create the user shipyard
         const userCarrier = createElement("div","carrier","userCarrier")
+        userCarrier.classList.add("userShip")
         userCarrier.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 188 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1.13728,0,0,0.751167,-14.2455,-0.759376)">
@@ -196,6 +246,7 @@ export let view = (function() {
             </svg>`
         userCarrier.setAttribute("draggable","true")
         const userBattleship = createElement("div","battleship","userBattleship")
+        userBattleship.classList.add("userShip")
         userBattleship.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 150 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1,0,0,1,-20.1628,-7.00741)">
@@ -232,6 +283,7 @@ export let view = (function() {
             </svg>`
         userBattleship.setAttribute("draggable","true")
         const userDestroyer = createElement("div","destroyer","userDestroyer")
+        userDestroyer.classList.add("userShip")
         userDestroyer.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1,0,0,1,-39.1628,-7.00741)">
@@ -254,6 +306,7 @@ export let view = (function() {
             </svg>`
         userDestroyer.setAttribute("draggable","true")
         const userSubmarine = createElement("div","submarine","userSubmarine")
+        userSubmarine.classList.add("userShip")
         userSubmarine.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1.06836,0,0,0.752001,-40.4103,-4.54153)">
@@ -271,6 +324,7 @@ export let view = (function() {
             </svg>`
         userSubmarine.setAttribute("draggable","true")
         const userBoat = createElement("div","boat","userBoat")
+        userBoat.classList.add("userShip")
         userBoat.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 74 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(0.976973,0,0,0.752048,-7.06641,-4.56753)">
@@ -414,6 +468,23 @@ export let view = (function() {
         const instructions = createElement("div","instructions",null)
         instructions.textContent = "Drag and drop your ships to place them on the board. Click on the board to rotate them."
         userSide.appendChild(instructions)
+
+        // Adding event listeners to user ships
+        const userShips = document.querySelectorAll(".userShip")
+        userShips.forEach(ship => {
+            ship.addEventListener("dragstart",dragStart)
+            offsetX = ship.getBoundingClientRect().width/2
+            offsetY = ship.getBoundingClientRect().height/2
+            ship.addEventListener("dragend",dragEnd)
+        })
+
+        // Adding event listeners to user board
+        const userBoard = document.querySelector("#userGameboardGrid")
+        userBoard.addEventListener("dragover",dragOver)
+        userBoard.addEventListener("dragenter",dragEnter)
+        userBoard.addEventListener("dragleave",dragLeave)
+        userBoard.addEventListener("drop",dragDrop)
+        userBoard.addEventListener("click",rotateShip)
 
     }
 

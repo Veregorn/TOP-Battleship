@@ -292,6 +292,10 @@ a:visited {
     flex-wrap: wrap;
 }
 
+#userGameboardGrid {
+    position: relative;
+}
+
 .gameboardSquare {
     width: 36px;
     height: 36px;
@@ -305,7 +309,7 @@ a:visited {
     background-color: #a1dcff;
 }
 
-.gameboardSquare:hover {
+#computerGameboardGrid .gameboardSquare:hover {
     background-color: #1b88e7;
 }
 
@@ -337,6 +341,10 @@ a:visited {
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 20px;
+}
+
+.userShip {
+    /* position: absolute; */ /* This is for the drag and drop */
 }
 
 .carrier {
