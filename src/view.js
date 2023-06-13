@@ -1,5 +1,4 @@
 // IMPORTS
-import interact from "interactjs";
 import carrierSvg from "./assets/graphics/carrier.svg";
 import submarineSvg from "./assets/graphics/submarine.svg";
 import battleshipSvg from "./assets/graphics/battleship.svg";
@@ -42,67 +41,13 @@ export let view = (function() {
         main.innerHTML = ""
     }
 
-    // Drag and drop functions
-    /* function dragStart(event) {
-        
-        console.log("dragStart")
-        
-        event.dataTransfer.setData("text/plain", event.target.id) // Save the id of the element being dragged
-
-    } */
-
-    /* function dragOver(event) {
-        
-        event.preventDefault()
-
-        // const data = event.dataTransfer.getData("text/plain")
-        // const draggedShip = document.getElementById(data)
-
-    } */
-
-    /* function dragEnter(event) {
-
-        console.log("dragenter")
-    } */
-
-    function dragEnd() {
-        
-        console.log("dragend")
-
-    }
-
-    /* function dragLeave() {
-
-        console.log("dragleave")
-
-    } */
-
-    /* function dragDrop(event) {
-
-        event.preventDefault()
-
-        // Obtén la posición del div en el que se soltó el barco
-        const x = event.clientX - offsetX
-        const y = event.clientY - offsetY
-
-        const draggedShipId = event.dataTransfer.getData("text/plain")
-        const draggedShip = document.getElementById(draggedShipId)
-        draggedShip.style.position = "absolute"
-        draggedShip.style.left = x-55 + "px"
-        draggedShip.style.top = y-128 + "px"
-        draggedShip.style.opacity = "0.7"
-        // event.target.appendChild(document.getElementById(draggedShip))
-
-    } */
-
-    /* function rotateShip() {
-
-        console.log("rotate")
-
-    } */
-
     // Loads game UI
     function loadGameUI() {
+
+        // Some useful variables
+        let selectedShipLength = 0
+        let orientation = "horizontal"
+        let selectedShipName = ""
         
         // SIDES
         
@@ -163,6 +108,15 @@ export let view = (function() {
             userYHeader.appendChild(userYHeaderSquare)
             computerYHeader.appendChild(computerYHeaderSquare)
         }
+        const userYHeaderShipyard = createElement("div","yHeaderShipyard",null)
+        const computerYHeaderShipyard = createElement("div","yHeaderShipyard",null)
+        userYHeaderShipyard.textContent = "Shipyard"
+        computerYHeaderShipyard.textContent = "Shipyard"
+        userYHeader.appendChild(userYHeaderShipyard)
+        computerYHeader.appendChild(computerYHeaderShipyard)
+
+        const userGridPanelContainer = createElement("div","gridPanelContainer","userGridPanelContainer")
+        const computerGridPanelContainer = createElement("div","gridPanelContainer","computerGridPanelContainer")
 
         const userGameboard = createElement("div","gameboardGrid","userGameboardGrid")
         const computerGameboard = createElement("div","gameboardGrid","computerGameboardGrid")
@@ -175,46 +129,29 @@ export let view = (function() {
             computerGameboard.appendChild(computerGameboardSquare)
         }
 
+        userGridPanelContainer.appendChild(userGameboard)
+        computerGridPanelContainer.appendChild(computerGameboard)
+
         userGameboardContainer.appendChild(userXHeader)
         userGameboardContainer.appendChild(userBottomBoard)
         userBottomBoard.appendChild(userYHeader)
-        userBottomBoard.appendChild(userGameboard)
+        userBottomBoard.appendChild(userGridPanelContainer)
 
         computerGameboardContainer.appendChild(computerXHeader)
         computerGameboardContainer.appendChild(computerBottomBoard)
         computerBottomBoard.appendChild(computerYHeader)
-        computerBottomBoard.appendChild(computerGameboard)
+        computerBottomBoard.appendChild(computerGridPanelContainer)
 
         userSide.appendChild(userGameboardContainer)
         computerSide.appendChild(computerGameboardContainer)
 
         // Fleet Status Panels
-        const userStatusPanelContainer = createElement("div","statusPanelContainer","userStatusPanelContainer")
-        const computerStatusPanelContainer = createElement("div","statusPanelContainer","computerStatusPanelContainer")
-
-        const userStatusHeader = createElement("div","statusHeader",null)
-        const computerStatusHeader = createElement("div","statusHeader",null)
-
-        const userStatusTitle = createElement("h2","panelTitle",null)
-        const computerStatusTitle = createElement("h2","panelTitle",null)
-
-        userStatusTitle.textContent = "Shipyard"
-        computerStatusTitle.textContent = "Shipyard"
-
-        userStatusHeader.appendChild(userStatusTitle)
-        computerStatusHeader.appendChild(computerStatusTitle)
-
-        userStatusPanelContainer.appendChild(userStatusHeader)
-        computerStatusPanelContainer.appendChild(computerStatusHeader)
 
         const userStatusPanel = createElement("div","statusPanel","userStatusPanel")
         const computerStatusPanel = createElement("div","statusPanel","computerStatusPanel")
 
-        userStatusPanelContainer.appendChild(userStatusPanel)
-        computerStatusPanelContainer.appendChild(computerStatusPanel)
-
-        userSide.appendChild(userStatusPanelContainer)
-        computerSide.appendChild(computerStatusPanelContainer)
+        userGridPanelContainer.appendChild(userStatusPanel)
+        computerGridPanelContainer.appendChild(computerStatusPanel)
 
         // Create the user shipyard
         const userCarrier = createElement("div","carrier","userCarrier")
@@ -240,7 +177,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        // userCarrier.setAttribute("draggable","true")
         const userBattleship = createElement("div","battleship","userBattleship")
         userBattleship.classList.add("userShip")
         userBattleship.innerHTML = `
@@ -277,7 +213,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        // userBattleship.setAttribute("draggable","true")
         const userDestroyer = createElement("div","destroyer","userDestroyer")
         userDestroyer.classList.add("userShip")
         userDestroyer.innerHTML = `
@@ -300,7 +235,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        // userDestroyer.setAttribute("draggable","true")
         const userSubmarine = createElement("div","submarine","userSubmarine")
         userSubmarine.classList.add("userShip")
         userSubmarine.innerHTML = `
@@ -318,7 +252,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        // userSubmarine.setAttribute("draggable","true")
         const userBoat = createElement("div","boat","userBoat")
         userBoat.classList.add("userShip")
         userBoat.innerHTML = `
@@ -333,7 +266,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        // userBoat.setAttribute("draggable","true")
         userStatusPanel.appendChild(userCarrier)
         userStatusPanel.appendChild(userBattleship)
         userStatusPanel.appendChild(userDestroyer)
@@ -363,7 +295,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        computerCarrier.setAttribute("draggable","true")
         const computerBattleship = createElement("div","battleship","computerBattleship")
         computerBattleship.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 150 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
@@ -399,7 +330,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        computerBattleship.setAttribute("draggable", "true")
         const computerDestroyer = createElement("div","destroyer","computerDestroyer")
         computerDestroyer.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
@@ -421,7 +351,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        computerDestroyer.setAttribute("draggable","true")
         const computerSubmarine = createElement("div","submarine","computerSubmarine")
         computerSubmarine.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
@@ -438,7 +367,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        computerSubmarine.setAttribute("draggable","true")
         const computerBoat = createElement("div","boat","computerBoat")
         computerBoat.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 74 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
@@ -452,7 +380,6 @@ export let view = (function() {
                     <ellipse cx="105.174" cy="15.017" rx="10.011" ry="9.991" style="fill:rgb(102,102,102);"/>
                 </g>
             </svg>`
-        computerBoat.setAttribute("draggable","true")
 
         computerStatusPanel.appendChild(computerCarrier)
         computerStatusPanel.appendChild(computerBattleship)
@@ -462,92 +389,122 @@ export let view = (function() {
 
         // Create a div to show instructions to the user
         const instructions = createElement("div","instructions",null)
-        instructions.textContent = "Drag and drop your ships to place them on the board. Click on the board to rotate them."
+        instructions.textContent = "Click on a ship to place it on the board"
         userSide.appendChild(instructions)
 
         // Adding event listeners to user ships
-        /* const userShips = document.querySelectorAll(".userShip")
+        const userShips = document.querySelectorAll(".userShip")
         userShips.forEach(ship => {
-            ship.addEventListener("dragstart",dragStart)
-            offsetX = ship.getBoundingClientRect().width/2
-            offsetY = ship.getBoundingClientRect().height/2
-            ship.addEventListener("dragend",dragEnd)
-        }) */
+            ship.addEventListener("click", () => {
 
-        // Adding event listeners to user board
-        /* const userBoard = document.querySelector("#userGameboardGrid")
-        userBoard.addEventListener("dragover",dragOver)
-        userBoard.addEventListener("dragenter",dragEnter)
-        userBoard.addEventListener("dragleave",dragLeave)
-        userBoard.addEventListener("drop",dragDrop)
-        userBoard.addEventListener("click",rotateShip) */
+                // If ship is already placed on board, return
+                if (ship.classList.contains("placed")) return
+                
+                // If there is other selected ship, remove the selected class from it
+                const selectedShip = document.querySelector(".selected")
+                if (selectedShip) selectedShip.classList.remove("selected")
 
-        // Variables to store ship position
-        let carrierPosX = 0
-        let carrierPosY = 0
-        let battleshipPosX = 0
-        let battleshipPosY = 0
-        let destroyerPosX = 0
-        let destroyerPosY = 0
-        let submarinePosX = 0
-        let submarinePosY = 0
-        let boatPosX = 0
-        let boatPosY = 0
+                // Add selected class to the clicked ship
+                ship.classList.add("selected")
 
-        // Adding code to use "interact.js" library
-        interact(".userShip")
-            .draggable({
-                modifiers: [
-                    interact.modifiers.restrictRect({
-                        restriction: "#userGameboardGrid",
-                        endOnly: true
-                    })
-                ],
-                listeners: {
-                    move (event) {
-                        if (event.target.id === "userCarrier") {
-                            carrierPosX += event.dx
-                            carrierPosY += event.dy
-                            event.target.style.transform = `translate(${carrierPosX}px,${carrierPosY}px)`
-                        } else if (event.target.id === "userBattleship") {
-                            battleshipPosX += event.dx
-                            battleshipPosY += event.dy
-                            event.target.style.transform = `translate(${battleshipPosX}px,${battleshipPosY}px)`
-                        } else if (event.target.id === "userDestroyer") {
-                            destroyerPosX += event.dx
-                            destroyerPosY += event.dy
-                            event.target.style.transform = `translate(${destroyerPosX}px,${destroyerPosY}px)`
-                        } else if (event.target.id === "userSubmarine") {
-                            submarinePosX += event.dx
-                            submarinePosY += event.dy
-                            event.target.style.transform = `translate(${submarinePosX}px,${submarinePosY}px)`
-                        } else if (event.target.id === "userBoat") {
-                            boatPosX += event.dx
-                            boatPosY += event.dy
-                            event.target.style.transform = `translate(${boatPosX}px,${boatPosY}px)`
-                        }
-                    },
-                    end (event) {
-                        dragEnd(event)
+                // Update selected ship and selectedShipLength variables
+                // eslint-disable-next-line prefer-destructuring
+                selectedShipName = ship.classList[0]
+                
+                switch (selectedShipName) {
+                    case "carrier":
+                        selectedShipLength = 5
+                        break
+                    case "battleship":
+                        selectedShipLength = 4
+                        break
+                    case "destroyer":
+                        selectedShipLength = 3
+                        break
+                    case "submarine":
+                        selectedShipLength = 3
+                        break
+                    case "boat":
+                        selectedShipLength = 2
+                        break
+                    default:
+                        selectedShipLength = 0
+                        break
+                }
+
+                // Change instructions text
+                instructions.textContent = "Select a position on the board to place the ship. Use T key to rotate the ship"
+
+            })
+        })
+
+        // Adding event listeners to user board cells
+        const userBoardSquares = Array.from(document.querySelectorAll("#userGameboardGrid .gameboardSquare"))
+        userBoardSquares.forEach((square,index) => {
+
+            square.addEventListener("mouseover", () => {
+
+                let siblingsToColor = []
+                const start = index
+                const rowStart = start - (start % 10)
+                const rowEnd = rowStart + 10
+
+                if (orientation === "horizontal") {
+
+                    const expectedEnd = start + selectedShipLength
+                    if (expectedEnd > rowEnd) { // if ship is too long to fit in the row
+                    
+                        siblingsToColor = userBoardSquares.slice(start, rowEnd)
+                        siblingsToColor.forEach(sibling => sibling.classList.add("hoverLimitsExceeded"))
+
+                    } else { // if ship fits in the row
+
+                        siblingsToColor = userBoardSquares.slice(start, expectedEnd)
+                        siblingsToColor.forEach(sibling => sibling.classList.add("hover"))
+
+                    }
+
+                } else { // vertical
+
+                    for (let i = start; i < start + selectedShipLength * 10; i += 10) {
+
+                        if (i < userBoardSquares.length) siblingsToColor.push(userBoardSquares[i])
+
+                    }
+
+                    if (siblingsToColor.length < selectedShipLength) { // if ship is too long to fit in the column
+
+                        siblingsToColor.forEach(sibling => sibling.classList.add("hoverLimitsExceeded"))
+
+                    } else { // if ship fits in the column
+
+                        siblingsToColor.forEach(sibling => sibling.classList.add("hover"))
+
                     }
                 }
+                
             })
 
-        interact("#userGameboardGrid")
-            .dropzone({
-                accept: ".userShip",
-                overlap: 0.75,
-                ondropactivate: function (event) {
-                    event.target.classList.add("drop-active")
-                }
-            })
-            .on("dragenter", function (event) {
-                const draggableElement = event.relatedTarget
-                const dropzoneElement = event.target
-                dropzoneElement.classList.add("drop-target")
-                draggableElement.classList.add("can-drop")
-            })
+            square.addEventListener("mouseout", () => {
                 
+                userBoardSquares.forEach(sibling => sibling.classList.remove("hover"))
+                userBoardSquares.forEach(sibling => sibling.classList.remove("hoverLimitsExceeded"))
+                
+            })
+
+            square.addEventListener("click", () => {
+
+            })
+
+        })
+
+        // Adding event listener to T key to rotate the selected ship
+        document.addEventListener("keydown", (e) => {
+            
+            if (e.key === "t") orientation = orientation === "horizontal" ? "vertical" : "horizontal"
+
+        })
+
     }
 
     // Loads initial UI screen

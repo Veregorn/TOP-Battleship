@@ -245,11 +245,10 @@ a:visited {
 }
 
 .xHeader {
-    width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    padding-left: 2em;
+    justify-content: left;
+    padding-left: 2.5em;
 }
 
 .xHeaderSquare {
@@ -284,6 +283,25 @@ a:visited {
     font-size: 1em;
 }
 
+.yHeaderShipyard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bruno Ace';
+    font-size: 1em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    rotate: 180deg;
+    margin-top: 1.8em;
+}
+
+.gridPanelContainer {
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .gameboardGrid {
     width: 380px;
     height: 380px;
@@ -309,42 +327,31 @@ a:visited {
     background-color: #a1dcff;
 }
 
+#userGameboardGrid .hover {
+    background-color: #999999;
+}
+
+#userGameboardGrid .hoverLimitsExceeded {
+    background-color: #c23434;
+}
+
 #computerGameboardGrid .gameboardSquare:hover {
     background-color: #1b88e7;
 }
 
 /* SHIPYARD */
 
-.statusPanelContainer {
-    width: 80%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 50px;
-}
-
-.panelTitle {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    rotate: 180deg;
-    font-family: 'Bruno Ace';
-    font-size: 1em;
-}
-
 .statusPanel {
-    width: 100%;
-    height: 100%;
+    width: 382px;
+    height: 78px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 20px;
-}
-
-.userShip {
-    /* position: absolute; */ /* This is for the drag and drop */
+    margin-top: 36px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5) 2px, transparent 2px), linear-gradient(90deg, rgba(0, 0, 0, 0.5) 2px, transparent 2px);
+    background-size: 38px 38px;
+    gap: 2px;
 }
 
 .carrier {
@@ -372,8 +379,17 @@ a:visited {
     height: 36px;
 }
 
-.shipShape {
-    cursor: move;
+.userShip {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.userShip:hover {
+    opacity: 1;
+}
+
+.userShip.selected {
+    opacity: 1;
 }
 
 .instructions {
@@ -381,6 +397,7 @@ a:visited {
     font-family: 'Bruno Ace';
     font-size: 0.8em;
     line-height: 1.5em;
+    text-align: center;
 }
 
 /* FOOTER */
