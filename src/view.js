@@ -9,6 +9,11 @@ import patrolSvg from "./assets/graphics/patrol-boat.svg";
 // eslint-disable-next-line import/prefer-default-export, import/no-mutable-exports, prefer-const, func-names
 export let view = (function() {
 
+    // Some useful variables
+    let selectedShipLength = 0
+    let orientation = "horizontal"
+    let selectedShipName = ""
+
     // Create an element with an optional CSS class and optional CSS id
     function createElement(tag, className, id) {
         
@@ -43,11 +48,6 @@ export let view = (function() {
 
     // Loads game UI
     function loadGameUI() {
-
-        // Some useful variables
-        let selectedShipLength = 0
-        let orientation = "horizontal"
-        let selectedShipName = ""
         
         // SIDES
         
@@ -124,7 +124,9 @@ export let view = (function() {
         // Generate the gameboard squares
         for (let i = 0; i < 100; i += 1) {
             const userGameboardSquare = createElement("div","gameboardSquare",null)
+            userGameboardSquare.setAttribute("data-index",i)
             const computerGameboardSquare = createElement("div","gameboardSquare",null)
+            computerGameboardSquare.setAttribute("data-index",i)
             userGameboard.appendChild(userGameboardSquare)
             computerGameboard.appendChild(computerGameboardSquare)
         }
@@ -509,7 +511,7 @@ export let view = (function() {
         const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
         userBoardSquares.forEach(square => {
             square.addEventListener("click", () => {
-                callback(square)
+                callback(square.getAttribute("data-index"), selectedShipName, orientation)
             })
         })
 
