@@ -1,8 +1,34 @@
 // Factory representing a Ship in the game
-const Ship = (name,length) => {
+const Ship = (name) => {
     
-    const _name = name // Carrier 5 - Battleship 4 - Destroyer 3 - Submarine 3 - Patrol Boat 2
-    const _length = length // Number of squares the ship occupies (see above)
+    const _name = name
+    
+    let _length = 0 // Number of squares the ship occupies
+
+    // Carrier 5 - Battleship 4 - Destroyer 3 - Submarine 3 - Patrol Boat 2
+    switch (true) {
+        
+        case _name === "Carrier":
+            _length = 5
+            break
+        case _name === "Battleship":
+            _length = 4
+            break
+        case _name === "Destroyer":
+            _length = 3
+            break
+        case _name === "Submarine":
+            _length = 3
+            break
+        case _name === "Patrol Boat":
+            _length = 2
+            break
+        default:
+            _length = 0
+            break
+
+    }
+
     let _hits = 0 // Number of times the ship has been damaged
     let _sunk = false // Indicates if the ship has been sunk or not
 

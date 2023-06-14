@@ -492,10 +492,6 @@ export let view = (function() {
                 
             })
 
-            square.addEventListener("click", () => {
-
-            })
-
         })
 
         // Adding event listener to T key to rotate the selected ship
@@ -503,6 +499,18 @@ export let view = (function() {
             
             if (e.key === "t") orientation = orientation === "horizontal" ? "vertical" : "horizontal"
 
+        })
+
+    }
+
+    // Associates an event listener to every cell of the user board
+    function onUserBoardClick(callback) {
+
+        const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
+        userBoardSquares.forEach(square => {
+            square.addEventListener("click", () => {
+                callback(square)
+            })
         })
 
     }
@@ -571,7 +579,8 @@ export let view = (function() {
     return {
         createElement,
         getElement,
-        loadCoverMainUI
+        loadCoverMainUI,
+        onUserBoardClick
     }
 
 })()

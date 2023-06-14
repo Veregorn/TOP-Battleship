@@ -25,7 +25,7 @@ test("At start, Ships array is empty", () => {
 })
 
 test("A ship placed into the limits of the board is correctly placed (horizontally)", () => {
-    const carrier = Ship("Carrier",5)
+    const carrier = Ship("Carrier")
     let j = 25
     myBoard.placeShip(carrier,j,"x")
     for (let i = 1; i <= carrier.getLength(); i += 1) {
@@ -39,7 +39,7 @@ test("A ship placed into the limits of the board is correctly placed (horizontal
 })
 
 test("A ship placed into the limits of the board is correctly placed (vertically)", () => {
-    const destroyer = Ship("Destroyer",3)
+    const destroyer = Ship("Destroyer")
     let j = 70
     const result = myBoard.placeShip(destroyer,j,"y")
     expect(result.success).toBe("A Destroyer has been placed")
@@ -62,13 +62,13 @@ test("Placing a ship out of the limits (x axis)", () => {
 })
 
 test("Checking ships array length after invalid placement", () => {
-    myBoard.placeShip(Ship("Destroyer",3),18,"x")
+    myBoard.placeShip(Ship("Destroyer"),18,"x")
     const ships = myBoard.getShips()
     expect(ships.length).toBe(0)
 })
 
 test("Attack hits a ship and records the hit correctly", () => {
-    const battleship = Ship("Battleship",4)
+    const battleship = Ship("Battleship")
     myBoard.placeShip(battleship,74,"x")
     myBoard.receiveAttack(77)
     expect(battleship.getHits()).toBe(1)
@@ -81,7 +81,7 @@ test("Attack fails and records the miss correctly", () => {
 })
 
 test("All the ships have been sunk", () => {
-    const battleship = Ship("Battleship",4)
+    const battleship = Ship("Battleship")
     myBoard.placeShip(battleship,74,"x")
     myBoard.receiveAttack(74)
     myBoard.receiveAttack(75)
@@ -95,8 +95,8 @@ test("All the ships have been sunk", () => {
 // Multiple ships placement and interactions
 
 test("Two non-overlapping ships are placed correctly next to each other (horizontally)", () => {
-    const carrier = Ship("Carrier",5)
-    const submarine = Ship("Submarine",3)
+    const carrier = Ship("Carrier")
+    const submarine = Ship("Submarine")
     myBoard.placeShip(carrier,10,"x")
     myBoard.placeShip(submarine,15,"x")
 
@@ -110,8 +110,8 @@ test("Two non-overlapping ships are placed correctly next to each other (horizon
 })
 
 test("Attack hits one ship and misses another", () => {
-    const carrier = Ship("Carrier",5)
-    const submarine = Ship("Submarine",3)
+    const carrier = Ship("Carrier")
+    const submarine = Ship("Submarine")
     myBoard.placeShip(carrier,10,"x")
     myBoard.placeShip(submarine,15,"x")
     myBoard.receiveAttack(14)
@@ -127,8 +127,8 @@ test("Attack hits one ship and misses another", () => {
 })
 
 test("One ship is sunk while another remains on the board", () => {
-    const carrier = Ship("Carrier",5)
-    const submarine = Ship("Submarine",3)
+    const carrier = Ship("Carrier")
+    const submarine = Ship("Submarine")
     myBoard.placeShip(carrier,10,"x")
     myBoard.placeShip(submarine,15,"x")
 
@@ -153,8 +153,8 @@ test("One ship is sunk while another remains on the board", () => {
 })
 
 test("Two ships can't be placed on the same square", () => {
-    const carrier = Ship("Carrier",5)
-    const submarine = Ship("Submarine",3)
+    const carrier = Ship("Carrier")
+    const submarine = Ship("Submarine")
     myBoard.placeShip(carrier,10,"x")
     const result = myBoard.placeShip(submarine,14,"x")
     
@@ -169,8 +169,8 @@ test("Two ships can't be placed on the same square", () => {
 })
 
 test("Two ships can't be placed on the same square (overlap happens in the last square of the second ship)", () => {
-    const carrier = Ship("Carrier",5)
-    const submarine = Ship("Submarine",3)
+    const carrier = Ship("Carrier")
+    const submarine = Ship("Submarine")
     myBoard.placeShip(carrier,50,"x")
     const result = myBoard.placeShip(submarine,33,"y")
 
@@ -190,7 +190,7 @@ test("Two ships can't be placed on the same square (overlap happens in the last 
 
 // Other cases
 test("A ships is hit several times but isn't sunk", () => {
-    const battleship = Ship("Battleship",4)
+    const battleship = Ship("Battleship")
     myBoard.placeShip(battleship,74,"x")
     myBoard.receiveAttack(74)
     myBoard.receiveAttack(75)
@@ -209,7 +209,7 @@ test("A ships is hit several times but isn't sunk", () => {
 
 // Edge cases
 test("A ship can be placed in a corner", () => {
-    const battleship = Ship("Battleship",4)
+    const battleship = Ship("Battleship")
     myBoard.placeShip(battleship,96,"x")
 
     // Ship has been placed correctly

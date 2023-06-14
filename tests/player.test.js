@@ -3,7 +3,7 @@ import Ship from "../src/ship";
 
 /* global test, expect, beforeEach */
 
-const myShips = [Ship("Carrier",5),Ship("Battleship",4),Ship("Destroyer",3),Ship("Submarine",3),Ship("Patrol Boat",2)]
+const myShips = [Ship("Carrier"),Ship("Battleship"),Ship("Destroyer"),Ship("Submarine"),Ship("Patrol Boat")]
 let player1
 let player2
 let player3
