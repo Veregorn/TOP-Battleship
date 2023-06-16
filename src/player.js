@@ -1,11 +1,12 @@
+import Ship from "./ship"
 import Gameboard from "./gameboard"
 
 // Factory representing a player in the game
-const Player = (type,ships) => {
+const Player = (type) => {
 
     const _gameBoard = Gameboard() // Each player has a game board
     const _type = type // Possible values: "Human" or "AI"
-    const _ships = ships // Array of ships a player is provided with
+    const _ships = [Ship("Carrier"),Ship("Battleship"),Ship("Destroyer"),Ship("Submarine"),Ship("Patrol Boat")] // Array of ships a player is provided with
     const _availableAttacks = Array.from({length: 100}, (_, index) => index) // Creates an array from 0 to 99
 
     // Gets the game board
@@ -45,31 +46,29 @@ const Player = (type,ships) => {
         return shuffledArray
     }
     
-    const placeShips = () => {
-
-        if (getPlayerType() === "AI") {
+    // Places ships randomly in the game board
+    const placeShipsRandomly = () => {
             
-            // Creates an ordered array 0 to 99
-            const startPositionCandidates = Array.from({ length: 100 }, (_, index) => index);
-            // Shuffle array positions            
-            const shuffledPositions = shuffleArray(startPositionCandidates);
+        // Creates an ordered array 0 to 99
+        const startPositionCandidates = Array.from({ length: 100 }, (_, index) => index);
+        // Shuffle array positions            
+        const shuffledPositions = shuffleArray(startPositionCandidates);
 
-            // For each ship this player has
-            for (let i = 0; i < getShips().length; i += 1) {
-                
-                // Iterate "shuffledPositions" array until find a valid ship placement
-                for (let j = 0; j < shuffledPositions.length; j += 1) {
-                    const direction = getRandomDirection();
-                    const result = getGameBoard().placeShip(getShipAtPos(i), shuffledPositions[j], direction);
+        // For each ship this player has
+        for (let i = 0; i < getShips().length; i += 1) {
+            
+            // Iterate "shuffledPositions" array until find a valid ship placement
+            for (let j = 0; j < shuffledPositions.length; j += 1) {
+                const direction = getRandomDirection();
+                const result = getGameBoard().placeShip(getShipAtPos(i), shuffledPositions[j], direction);
 
-                    if (result.success) {
-                        console.log(`Result: ${result.success}`);
-                        break;
-                    }
+                if (result.success) {
+                    console.log(`Result: ${result.success}`);
+                    break;
                 }
             }
-
         }
+        
     }
 
     // Generates a random index from that array of available attacks
@@ -109,7 +108,7 @@ const Player = (type,ships) => {
 
     return {
         getGameBoard,
-        placeShips,
+        placeShipsRandomly,
         generateAutoAttack,
         isValidAttack,
         manualAttack,

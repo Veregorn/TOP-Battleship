@@ -46,6 +46,50 @@ export let view = (function() {
         main.innerHTML = ""
     }
 
+    // Handles a click on a ship in the user's Shipyard
+    function handleShipClick(ship) {
+
+        // If ship is already placed on board, return
+        if (ship.classList.contains("placed")) return
+                
+        // If there is other selected ship, remove the selected class from it
+        const selectedShip = document.querySelector(".selected")
+        if (selectedShip) selectedShip.classList.remove("selected")
+
+        // Add selected class to the clicked ship
+        ship.classList.add("selected")
+
+        // Update selected ship and selectedShipLength variables
+        // eslint-disable-next-line prefer-destructuring
+        selectedShipName = ship.classList[0]
+        
+        switch (selectedShipName) {
+            case "carrier":
+                selectedShipLength = 5
+                break
+            case "battleship":
+                selectedShipLength = 4
+                break
+            case "destroyer":
+                selectedShipLength = 3
+                break
+            case "submarine":
+                selectedShipLength = 3
+                break
+            case "boat":
+                selectedShipLength = 2
+                break
+            default:
+                selectedShipLength = 0
+                break
+        }
+
+        // Change instructions text
+        const instructions = getElement(".instructions")
+        if (instructions) instructions.textContent = "Select a position on the board to place the ship. Use T key to rotate the ship"
+
+    }
+
     // Loads game UI
     function loadGameUI() {
         
@@ -391,53 +435,21 @@ export let view = (function() {
 
         // Create a div to show instructions to the user
         const instructions = createElement("div","instructions",null)
-        instructions.textContent = "Click on a ship to place it on the board"
+        instructions.textContent = "Select a placement option for your ships"
+        const buttonsContainer = createElement("div","buttonsContainer",null)
+        instructions.appendChild(buttonsContainer)
+        const manualButton = createElement("button","placementButton","manualButton")
+        manualButton.textContent = "Manual Placement"
+        const randomButton = createElement("button","placementButton","randomButton")
+        randomButton.textContent = "Random Placement"
+        buttonsContainer.appendChild(manualButton)
+        buttonsContainer.appendChild(randomButton)
         userSide.appendChild(instructions)
 
         // Adding event listeners to user ships
         const userShips = document.querySelectorAll(".userShip")
         userShips.forEach(ship => {
-            ship.addEventListener("click", () => {
-
-                // If ship is already placed on board, return
-                if (ship.classList.contains("placed")) return
-                
-                // If there is other selected ship, remove the selected class from it
-                const selectedShip = document.querySelector(".selected")
-                if (selectedShip) selectedShip.classList.remove("selected")
-
-                // Add selected class to the clicked ship
-                ship.classList.add("selected")
-
-                // Update selected ship and selectedShipLength variables
-                // eslint-disable-next-line prefer-destructuring
-                selectedShipName = ship.classList[0]
-                
-                switch (selectedShipName) {
-                    case "carrier":
-                        selectedShipLength = 5
-                        break
-                    case "battleship":
-                        selectedShipLength = 4
-                        break
-                    case "destroyer":
-                        selectedShipLength = 3
-                        break
-                    case "submarine":
-                        selectedShipLength = 3
-                        break
-                    case "boat":
-                        selectedShipLength = 2
-                        break
-                    default:
-                        selectedShipLength = 0
-                        break
-                }
-
-                // Change instructions text
-                instructions.textContent = "Select a position on the board to place the ship. Use T key to rotate the ship"
-
-            })
+            ship.addEventListener("click", (event) => handleShipClick(ship,event))
         })
 
         // Adding event listeners to user board cells
@@ -517,8 +529,52 @@ export let view = (function() {
 
     }
 
+    // Associates an event listener to random placement button
+    function onRandomPlacementClick(callback) {
+
+        const randomButton = document.querySelector("#randomButton")
+        randomButton.addEventListener("click", () => {
+            
+            callback()
+            // Delete the buttons container from the instructions div
+            const buttonsContainer = document.querySelector(".buttonsContainer")
+            buttonsContainer.remove()
+            // Change instructions text
+            const instructions = document.querySelector(".instructions")
+            instructions.textContent = "Select a position on enemy board to attack"
+            // Add class ".placed" to all user ships
+            const userShips = document.querySelectorAll(".userShip")
+            userShips.forEach(ship => {
+                
+                ship.classList.add("placed")
+                ship.classList.remove("selected")
+            
+            })
+            // Delete property "cursor: pointer" from user board squares
+            const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
+            // eslint-disable-next-line no-param-reassign
+            userBoardSquares.forEach(square => {square.style.cursor = "default"})
+            // Revert global variables to default values
+            selectedShipName = ""
+            selectedShipLength = 0
+
+        })
+
+    }
+
+    // Loads the user gameboard
+    function loadUserGameboard(gameboard) {
+
+        const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
+        userBoardSquares.forEach((square,index) => {
+            // If there is a ship on the square, add the "occupied" class to it
+            if (gameboard[index] !== "Water") square.classList.add("occupied")
+        })
+
+    }
+
     // Loads initial UI screen
-    function loadCoverMainUI() {
+    function loadCoverMainUI(loadMainUICallback) {
     
         // Create a screen <div></div> that covers all the space available on browser nav
         const screen = createElement("div",null,"screen")
@@ -551,7 +607,7 @@ export let view = (function() {
         glowingButton.textContent = "START"
         glowingButton.addEventListener("click", () => {
             deleteMainUI()
-            loadGameUI()
+            loadMainUICallback()
         })
         main.appendChild(glowingButton)
 
@@ -578,11 +634,38 @@ export let view = (function() {
 
     }
 
+    // Delete Event Listeners associated with user Ships placement (when yet placed)
+    function deleteUserGameboardEventListeners() {
+
+        // First remove the event listeners from the ships
+        const userShips = document.querySelectorAll(".userShip")
+        userShips.forEach(ship => {
+            console.log("Removing event listeners from ships")
+            ship.removeEventListener("click", (event) => handleShipClick(ship,event))
+        })
+
+        // Then remove the event listeners from the gameboard squares
+        const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
+        userBoardSquares.forEach(square => {
+            
+            console.log("Removing event listeners from squares")
+            square.removeEventListener("click", () => {})
+            square.removeEventListener("mouseover", () => {})
+            square.removeEventListener("mouseout", () => {})
+
+        })
+
+    }
+
     return {
         createElement,
         getElement,
         loadCoverMainUI,
-        onUserBoardClick
+        onUserBoardClick,
+        onRandomPlacementClick,
+        loadUserGameboard,
+        loadGameUI,
+        deleteUserGameboardEventListeners
     }
 
 })()
