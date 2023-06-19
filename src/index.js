@@ -31,7 +31,18 @@ function loadMainUI() {
 
     // Wait for user to click on a square
     view.onUserBoardClick( (squareNum, shipName, orientation) => {
-        user.placeShip(squareNum, shipName, orientation) // Esto no existe pero algo hay que crear
+        
+        // Place user ship
+        const res = user.placeShip(squareNum, shipName, orientation)
+
+        // if "placeShip returns an error, show it"
+        if (res.error) {
+            view.showUserError(res.error)
+        }
+        else {
+            view.updateUserGameboard(res.squares,shipName) // Update user board
+        }
+
     })
 
 }

@@ -394,6 +394,11 @@ a:visited {
     opacity: 1;
 }
 
+.userShip.no-hover:hover {
+    opacity: 0.7;
+    cursor: default;
+}
+
 .userShip.selected {
     opacity: 1;
 }

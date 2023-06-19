@@ -79,8 +79,11 @@ const Gameboard = () => {
         // Place the ship in the array of ships
         setShip(ship)
 
-        // Return a success message
-        return { success: `A ${ship.getName()} has been placed` }
+        // Return a success message and the array of valid positions
+        return {
+            data: validPosArray,
+            success: `A ${ship.getName()} has been placed`
+        }
 
     }
 

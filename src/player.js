@@ -78,17 +78,17 @@ const Player = (type) => {
         // Shuffle array positions            
         const shuffledPositions = shuffleArray(startPositionCandidates);
 
-        // For each ship this player has
-        for (let i = 0; i < getShips().length; i += 1) {
+        // While the array of ships is not empty
+        while (getShips().length > 0) {
             
             // Iterate "shuffledPositions" array until find a valid ship placement
             for (let j = 0; j < shuffledPositions.length; j += 1) {
-                const direction = getRandomDirection();
-                const result = getGameBoard().placeShip(getShipAtPos(i), shuffledPositions[j], direction);
+                const direction = getRandomDirection()
+                const result = getGameBoard().placeShip(getShipAtPos(getShips().length - 1), shuffledPositions[j], direction)
 
                 if (result.success) {
-                    console.log(`Result: ${result.success}`);
-                    break;
+                    getShips().pop()
+                    break
                 }
             }
         }
@@ -98,10 +98,29 @@ const Player = (type) => {
     // Places a ship manually on the gameboard
     const placeShip = (square, shipName, orientation) => {
         
+        // Get the ship
+        const ship = getShipByName(shipName)
+
+        // Test if ship exists
+        if (!ship) {
+            return { error: "Ship doesn't exist!" }
+        }
+
         // We need to translate "orientation" into "direction"
         const direction = orientation === "horizontal" ? "x" : "y"
 
-        getGameBoard().placeShip(square,direction)
+        const res = getGameBoard().placeShip(square, ship, direction)
+
+        // If ship placement was successful, 
+        // delete it from the player's ships array,
+        // return success msg and the array of squares this ship occupies
+        if (res.success) {
+            
+            deleteShipByName(shipName)
+            return { success: "Ship placed!", squares: res.data }
+
+        }
+
     }
 
     // Generates a random index from that array of available attacks

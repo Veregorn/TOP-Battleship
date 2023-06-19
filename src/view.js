@@ -13,7 +13,7 @@ export let view = (function() {
     let selectedShipLength = 0
     let orientation = "horizontal"
     let selectedShipName = ""
-    let userGameboardStatus = "ready"
+    let userGameboardStatus = "blocked"
 
     // Create an element with an optional CSS class and optional CSS id
     function createElement(tag, className, id) {
@@ -86,7 +86,7 @@ export let view = (function() {
         }
 
         // Change instructions text
-        const instructions = getElement(".instructions")
+        const instructions = document.querySelector(".instructions")
         if (instructions) instructions.textContent = "Select a position on the board to place the ship. Use T key to rotate the ship"
 
     }
@@ -203,6 +203,7 @@ export let view = (function() {
         // Create the user shipyard
         const userCarrier = createElement("div","carrier","userCarrier")
         userCarrier.classList.add("userShip")
+        userCarrier.classList.add("no-hover")
         userCarrier.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 188 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1.13728,0,0,0.751167,-14.2455,-0.759376)">
@@ -226,6 +227,7 @@ export let view = (function() {
             </svg>`
         const userBattleship = createElement("div","battleship","userBattleship")
         userBattleship.classList.add("userShip")
+        userBattleship.classList.add("no-hover")
         userBattleship.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 150 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1,0,0,1,-20.1628,-7.00741)">
@@ -262,6 +264,7 @@ export let view = (function() {
             </svg>`
         const userDestroyer = createElement("div","destroyer","userDestroyer")
         userDestroyer.classList.add("userShip")
+        userDestroyer.classList.add("no-hover")
         userDestroyer.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1,0,0,1,-39.1628,-7.00741)">
@@ -284,6 +287,7 @@ export let view = (function() {
             </svg>`
         const userSubmarine = createElement("div","submarine","userSubmarine")
         userSubmarine.classList.add("userShip")
+        userSubmarine.classList.add("no-hover")
         userSubmarine.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1.06836,0,0,0.752001,-40.4103,-4.54153)">
@@ -301,6 +305,7 @@ export let view = (function() {
             </svg>`
         const userBoat = createElement("div","boat","userBoat")
         userBoat.classList.add("userShip")
+        userBoat.classList.add("no-hover")
         userBoat.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 74 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(0.976973,0,0,0.752048,-7.06641,-4.56753)">
@@ -472,6 +477,9 @@ export let view = (function() {
             // Delete the buttons container from the instructions div
             const buttonsContainer = document.querySelector(".buttonsContainer")
             buttonsContainer.remove()
+
+            // Change gameboard status
+            userGameboardStatus = "placing"
             
             // Change instructions text
             const instructions = document.querySelector(".instructions")
@@ -480,6 +488,7 @@ export let view = (function() {
             // Adding event listeners to user ships
             const userShips = document.querySelectorAll(".userShip")
             userShips.forEach(ship => {
+                ship.classList.remove("no-hover")
                 ship.addEventListener("click", (event) => handleShipClick(ship,event))
             })
 
@@ -680,6 +689,14 @@ export let view = (function() {
 
     }
 
+    // Shows an error in "instructions" div
+    function showUserError(error) {
+
+        const instructions = document.querySelector(".instructions")
+        instructions.textContent = error
+
+    }
+
     return {
         createElement,
         getElement,
@@ -689,7 +706,8 @@ export let view = (function() {
         loadUserGameboard,
         loadGameUI,
         deleteUserGameboardEventListeners,
-        onManualPlacementClick
+        onManualPlacementClick,
+        showUserError
     }
 
 })()
