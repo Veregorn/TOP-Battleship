@@ -13,6 +13,7 @@ export let view = (function() {
     let selectedShipLength = 0
     let orientation = "horizontal"
     let selectedShipName = ""
+    let userGameboardStatus = "ready"
 
     // Create an element with an optional CSS class and optional CSS id
     function createElement(tag, className, id) {
@@ -446,75 +447,6 @@ export let view = (function() {
         buttonsContainer.appendChild(randomButton)
         userSide.appendChild(instructions)
 
-        // Adding event listeners to user ships
-        const userShips = document.querySelectorAll(".userShip")
-        userShips.forEach(ship => {
-            ship.addEventListener("click", (event) => handleShipClick(ship,event))
-        })
-
-        // Adding event listeners to user board cells
-        const userBoardSquares = Array.from(document.querySelectorAll("#userGameboardGrid .gameboardSquare"))
-        userBoardSquares.forEach((square,index) => {
-
-            square.addEventListener("mouseover", () => {
-
-                let siblingsToColor = []
-                const start = index
-                const rowStart = start - (start % 10)
-                const rowEnd = rowStart + 10
-
-                if (orientation === "horizontal") {
-
-                    const expectedEnd = start + selectedShipLength
-                    if (expectedEnd > rowEnd) { // if ship is too long to fit in the row
-                    
-                        siblingsToColor = userBoardSquares.slice(start, rowEnd)
-                        siblingsToColor.forEach(sibling => sibling.classList.add("hoverLimitsExceeded"))
-
-                    } else { // if ship fits in the row
-
-                        siblingsToColor = userBoardSquares.slice(start, expectedEnd)
-                        siblingsToColor.forEach(sibling => sibling.classList.add("hover"))
-
-                    }
-
-                } else { // vertical
-
-                    for (let i = start; i < start + selectedShipLength * 10; i += 10) {
-
-                        if (i < userBoardSquares.length) siblingsToColor.push(userBoardSquares[i])
-
-                    }
-
-                    if (siblingsToColor.length < selectedShipLength) { // if ship is too long to fit in the column
-
-                        siblingsToColor.forEach(sibling => sibling.classList.add("hoverLimitsExceeded"))
-
-                    } else { // if ship fits in the column
-
-                        siblingsToColor.forEach(sibling => sibling.classList.add("hover"))
-
-                    }
-                }
-                
-            })
-
-            square.addEventListener("mouseout", () => {
-                
-                userBoardSquares.forEach(sibling => sibling.classList.remove("hover"))
-                userBoardSquares.forEach(sibling => sibling.classList.remove("hoverLimitsExceeded"))
-                
-            })
-
-        })
-
-        // Adding event listener to T key to rotate the selected ship
-        document.addEventListener("keydown", (e) => {
-            
-            if (e.key === "t") orientation = orientation === "horizontal" ? "vertical" : "horizontal"
-
-        })
-
     }
 
     // Associates an event listener to every cell of the user board
@@ -523,13 +455,102 @@ export let view = (function() {
         const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
         userBoardSquares.forEach(square => {
             square.addEventListener("click", () => {
-                callback(square.getAttribute("data-index"), selectedShipName, orientation)
+                if (userGameboardStatus !== "blocked") {
+                    callback(square.getAttribute("data-index"), selectedShipName, orientation)
+                }
             })
         })
 
     }
 
-    // Associates an event listener to random placement button
+    // Associates an event listener to "Manual Placement" button
+    function onManualPlacementClick() {
+
+        const manualButton = document.querySelector("#manualButton")
+        manualButton.addEventListener("click", () => {
+
+            // Delete the buttons container from the instructions div
+            const buttonsContainer = document.querySelector(".buttonsContainer")
+            buttonsContainer.remove()
+            
+            // Change instructions text
+            const instructions = document.querySelector(".instructions")
+            instructions.textContent = "Select a not yet placed ship"
+            
+            // Adding event listeners to user ships
+            const userShips = document.querySelectorAll(".userShip")
+            userShips.forEach(ship => {
+                ship.addEventListener("click", (event) => handleShipClick(ship,event))
+            })
+
+            // Adding event listeners to user board cells
+            const userBoardSquares = Array.from(document.querySelectorAll("#userGameboardGrid .gameboardSquare"))
+            userBoardSquares.forEach((square,index) => {
+
+                square.addEventListener("mouseover", () => {
+
+                    let siblingsToColor = []
+                    const start = index
+                    const rowStart = start - (start % 10)
+                    const rowEnd = rowStart + 10
+
+                    if (orientation === "horizontal") {
+
+                        const expectedEnd = start + selectedShipLength
+                        if (expectedEnd > rowEnd) { // if ship is too long to fit in the row
+                        
+                            siblingsToColor = userBoardSquares.slice(start, rowEnd)
+                            siblingsToColor.forEach(sibling => sibling.classList.add("hoverLimitsExceeded"))
+
+                        } else { // if ship fits in the row
+
+                            siblingsToColor = userBoardSquares.slice(start, expectedEnd)
+                            siblingsToColor.forEach(sibling => sibling.classList.add("hover"))
+
+                        }
+
+                    } else { // vertical
+
+                        for (let i = start; i < start + selectedShipLength * 10; i += 10) {
+
+                            if (i < userBoardSquares.length) siblingsToColor.push(userBoardSquares[i])
+
+                        }
+
+                        if (siblingsToColor.length < selectedShipLength) { // if ship is too long to fit in the column
+
+                            siblingsToColor.forEach(sibling => sibling.classList.add("hoverLimitsExceeded"))
+
+                        } else { // if ship fits in the column
+
+                            siblingsToColor.forEach(sibling => sibling.classList.add("hover"))
+
+                        }
+                    }
+                    
+                })
+
+                square.addEventListener("mouseout", () => {
+                    
+                    userBoardSquares.forEach(sibling => sibling.classList.remove("hover"))
+                    userBoardSquares.forEach(sibling => sibling.classList.remove("hoverLimitsExceeded"))
+                    
+                })
+
+            })
+
+            // Adding event listener to T key to rotate the selected ship
+            document.addEventListener("keydown", (e) => {
+                
+                if (e.key === "t") orientation = orientation === "horizontal" ? "vertical" : "horizontal"
+
+            })
+
+        })
+
+    }
+
+    // Associates an event listener to "Random Placement" button
     function onRandomPlacementClick(callback) {
 
         const randomButton = document.querySelector("#randomButton")
@@ -557,6 +578,8 @@ export let view = (function() {
             // Revert global variables to default values
             selectedShipName = ""
             selectedShipLength = 0
+            // Change global variable userGameboardStatus
+            userGameboardStatus = "blocked"
 
         })
 
@@ -665,7 +688,8 @@ export let view = (function() {
         onRandomPlacementClick,
         loadUserGameboard,
         loadGameUI,
-        deleteUserGameboardEventListeners
+        deleteUserGameboardEventListeners,
+        onManualPlacementClick
     }
 
 })()

@@ -21,6 +21,30 @@ const Player = (type) => {
     // Gets ship at position in the array of player's ships
     const getShipAtPos = (pos) => _ships[pos]
 
+    // Receives a name and returns the ship with that name or null if it doesn't exist
+    const getShipByName = (name) => {
+        
+        for (let i = 0; i < _ships.length; i += 1) {
+            if (_ships[i].getName() === name) {
+                return _ships[i]
+            }
+        }
+        return null
+        
+    }
+
+    // Receives a ship name and deletes it from the player's ships array
+    const deleteShipByName = (name) => {
+        
+        for (let i = 0; i < _ships.length; i += 1) {
+            if (_ships[i].getName() === name) {
+                _ships.splice(i, 1)
+                break
+            }
+        }
+
+    }
+
     // Gets the attacks array
     const getAvailableAttacks = () => _availableAttacks
 
@@ -46,7 +70,7 @@ const Player = (type) => {
         return shuffledArray
     }
     
-    // Places ships randomly in the game board
+    // Places ships randomly on the game board
     const placeShipsRandomly = () => {
             
         // Creates an ordered array 0 to 99
@@ -69,6 +93,15 @@ const Player = (type) => {
             }
         }
         
+    }
+
+    // Places a ship manually on the gameboard
+    const placeShip = (square, shipName, orientation) => {
+        
+        // We need to translate "orientation" into "direction"
+        const direction = orientation === "horizontal" ? "x" : "y"
+
+        getGameBoard().placeShip(square,direction)
     }
 
     // Generates a random index from that array of available attacks
@@ -114,7 +147,10 @@ const Player = (type) => {
         manualAttack,
         getPlayerType,
         getShips,
-        getRandomDirection
+        getRandomDirection,
+        placeShip,
+        getShipByName,
+        deleteShipByName
     }
 
 }

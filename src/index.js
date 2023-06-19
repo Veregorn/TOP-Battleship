@@ -15,6 +15,9 @@ function loadMainUI() {
     // Place computer ships
     computer.placeShipsRandomly()
 
+    // Manage manual placement button
+    view.onManualPlacementClick()
+
     // Manage random placement button
     view.onRandomPlacementClick( () => {
         

@@ -64,3 +64,14 @@ test("Random direction is x or y", () => {
     expect(directions.has("x")).toBeTruthy()
     expect(directions.has("y")).toBeTruthy()
 })
+
+test("Find a ship by name and exist", () => {
+    const ship = player1.getShipByName("Carrier")
+    expect(ship).toBeDefined()
+})
+
+test("Delete a ship by name. Find this ship by name and not exist", () => {
+    player1.deleteShipByName("Carrier")
+    const ship = player1.getShipByName("Carrier")
+    expect(ship).toBeNull()
+})

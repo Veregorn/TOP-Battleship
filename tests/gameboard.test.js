@@ -52,12 +52,12 @@ test("A ship placed into the limits of the board is correctly placed (vertically
 })
 
 test("Placing a ship out of the limits (y axis)", () => {
-    const result = myBoard.placeShip(Ship("Destroyer",3),80,"y")
+    const result = myBoard.placeShip(Ship("Destroyer"),80,"y")
     expect(result.error).toBe("You are exceeding the limits of the board")
 })
 
 test("Placing a ship out of the limits (x axis)", () => {
-    const result = myBoard.placeShip(Ship("Destroyer",3),18,"x")
+    const result = myBoard.placeShip(Ship("Destroyer"),18,"x")
     expect(result.error).toBe("You are exceeding the limits of the board")
 })
 
