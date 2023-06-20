@@ -6,7 +6,7 @@ const Player = (type) => {
 
     const _gameBoard = Gameboard() // Each player has a game board
     const _type = type // Possible values: "Human" or "AI"
-    const _ships = [Ship("Carrier"),Ship("Battleship"),Ship("Destroyer"),Ship("Submarine"),Ship("Patrol Boat")] // Array of ships a player is provided with
+    const _ships = [Ship("carrier"),Ship("battleship"),Ship("destroyer"),Ship("submarine"),Ship("boat")] // Array of ships a player is provided with
     const _availableAttacks = Array.from({length: 100}, (_, index) => index) // Creates an array from 0 to 99
 
     // Gets the game board
@@ -109,7 +109,7 @@ const Player = (type) => {
         // We need to translate "orientation" into "direction"
         const direction = orientation === "horizontal" ? "x" : "y"
 
-        const res = getGameBoard().placeShip(square, ship, direction)
+        const res = getGameBoard().placeShip(ship, square, direction)
 
         // If ship placement was successful, 
         // delete it from the player's ships array,
@@ -120,6 +120,8 @@ const Player = (type) => {
             return { success: "Ship placed!", squares: res.data }
 
         }
+        
+        return { error: "Invalid ship placement!" }
 
     }
 

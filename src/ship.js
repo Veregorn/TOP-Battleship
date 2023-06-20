@@ -8,19 +8,19 @@ const Ship = (name) => {
     // Carrier 5 - Battleship 4 - Destroyer 3 - Submarine 3 - Patrol Boat 2
     switch (true) {
         
-        case _name === "Carrier":
+        case _name === "carrier":
             _length = 5
             break
-        case _name === "Battleship":
+        case _name === "battleship":
             _length = 4
             break
-        case _name === "Destroyer":
+        case _name === "destroyer":
             _length = 3
             break
-        case _name === "Submarine":
+        case _name === "submarine":
             _length = 3
             break
-        case _name === "Patrol Boat":
+        case _name === "boat":
             _length = 2
             break
         default:

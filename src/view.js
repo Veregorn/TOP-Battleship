@@ -461,7 +461,7 @@ export let view = (function() {
         userBoardSquares.forEach(square => {
             square.addEventListener("click", () => {
                 if (userGameboardStatus !== "blocked") {
-                    callback(square.getAttribute("data-index"), selectedShipName, orientation)
+                    callback(parseInt(square.getAttribute("data-index"),10), selectedShipName, orientation)
                 }
             })
         })
@@ -697,6 +697,18 @@ export let view = (function() {
 
     }
 
+    // Change background color of the squares passed as argument
+    function updateUserGameboardShipPlacement(arrayOfSquares) {
+
+        arrayOfSquares.forEach(square => {
+            
+            const userBoardSquare = document.querySelector(`[data-index="${square}"]`)
+            userBoardSquare.classList.add("occupied")
+
+        })
+
+    }
+
     return {
         createElement,
         getElement,
@@ -707,7 +719,8 @@ export let view = (function() {
         loadGameUI,
         deleteUserGameboardEventListeners,
         onManualPlacementClick,
-        showUserError
+        showUserError,
+        updateUserGameboardShipPlacement
     }
 
 })()

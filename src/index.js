@@ -40,7 +40,7 @@ function loadMainUI() {
             view.showUserError(res.error)
         }
         else {
-            view.updateUserGameboard(res.squares,shipName) // Update user board
+            view.updateUserGameboardShipPlacement(res.squares) // Update user board
         }
 
     })
