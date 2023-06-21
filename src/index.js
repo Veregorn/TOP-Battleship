@@ -37,10 +37,12 @@ function loadMainUI() {
 
         // if "placeShip returns an error, show it"
         if (res.error) {
-            view.showUserError(res.error)
+            view.showUserInfo(res.error)
         }
         else {
+            view.showUserInfo(res.success) // Show success message
             view.updateUserGameboardShipPlacement(res.squares) // Update user board
+            view.updateUserShipyard(shipName) // Update user shipyard
         }
 
     })

@@ -13,7 +13,7 @@ export let view = (function() {
     let selectedShipLength = 0
     let orientation = "horizontal"
     let selectedShipName = ""
-    let userGameboardStatus = "blocked"
+    let placedShipsCounter = 0
 
     // Create an element with an optional CSS class and optional CSS id
     function createElement(tag, className, id) {
@@ -47,11 +47,19 @@ export let view = (function() {
         main.innerHTML = ""
     }
 
+    // Shows an error in "instructions" div
+    function showUserInfo(error) {
+
+        const instructions = document.querySelector(".instructions")
+        instructions.textContent = error
+
+    }
+
     // Handles a click on a ship in the user's Shipyard
     function handleShipClick(ship) {
 
         // If ship is already placed on board, return
-        if (ship.classList.contains("placed")) return
+        if (ship.classList.contains("placed")) showUserInfo("Ship already placed on board")
                 
         // If there is other selected ship, remove the selected class from it
         const selectedShip = document.querySelector(".selected")
@@ -164,6 +172,7 @@ export let view = (function() {
         const computerGridPanelContainer = createElement("div","gridPanelContainer","computerGridPanelContainer")
 
         const userGameboard = createElement("div","gameboardGrid","userGameboardGrid")
+        userGameboard.classList.add("blocked")
         const computerGameboard = createElement("div","gameboardGrid","computerGameboardGrid")
 
         // Generate the gameboard squares
@@ -442,25 +451,28 @@ export let view = (function() {
         // Create a div to show instructions to the user
         const instructions = createElement("div","instructions",null)
         instructions.textContent = "Select a placement option for your ships"
+        userSide.appendChild(instructions)
+
+        // Create a div to show buttons to the user
         const buttonsContainer = createElement("div","buttonsContainer",null)
-        instructions.appendChild(buttonsContainer)
+        userSide.appendChild(buttonsContainer)
         const manualButton = createElement("button","placementButton","manualButton")
         manualButton.textContent = "Manual Placement"
         const randomButton = createElement("button","placementButton","randomButton")
         randomButton.textContent = "Random Placement"
         buttonsContainer.appendChild(manualButton)
         buttonsContainer.appendChild(randomButton)
-        userSide.appendChild(instructions)
 
     }
 
     // Associates an event listener to every cell of the user board
     function onUserBoardClick(callback) {
 
+        const userGameboardGrid = getElement("userGameboardGrid")
         const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
         userBoardSquares.forEach(square => {
             square.addEventListener("click", () => {
-                if (userGameboardStatus !== "blocked") {
+                if (!userGameboardGrid.classList.contains("blocked")) {
                     callback(parseInt(square.getAttribute("data-index"),10), selectedShipName, orientation)
                 }
             })
@@ -474,12 +486,14 @@ export let view = (function() {
         const manualButton = document.querySelector("#manualButton")
         manualButton.addEventListener("click", () => {
 
-            // Delete the buttons container from the instructions div
-            const buttonsContainer = document.querySelector(".buttonsContainer")
-            buttonsContainer.remove()
+            // Delete the buttons from the instructions div
+            manualButton.remove()
+            const randomButton = getElement("randomButton")
+            randomButton.remove()
 
             // Change gameboard status
-            userGameboardStatus = "placing"
+            const userGameboardGrid = getElement("userGameboardGrid")
+            userGameboardGrid.classList.remove("blocked")
             
             // Change instructions text
             const instructions = document.querySelector(".instructions")
@@ -559,6 +573,21 @@ export let view = (function() {
 
     }
 
+    // Show a "Start Game" button
+    function showStartGameButton() {
+
+        // Show the "Start Game" button
+        const startGameButton = createElement("button", null, "start-game-button")
+        startGameButton.textContent = "START GAME"
+        startGameButton.addEventListener("click", () => {
+
+        })
+
+        const buttonsContainer = document.querySelector(".buttonsContainer")
+        buttonsContainer.appendChild(startGameButton)
+
+    }
+
     // Associates an event listener to "Random Placement" button
     function onRandomPlacementClick(callback) {
 
@@ -566,29 +595,33 @@ export let view = (function() {
         randomButton.addEventListener("click", () => {
             
             callback()
-            // Delete the buttons container from the instructions div
-            const buttonsContainer = document.querySelector(".buttonsContainer")
-            buttonsContainer.remove()
+            // Delete the buttons from the instructions div
+            const manualButton = getElement("manualButton")
+            manualButton.remove()
+            randomButton.remove()
             // Change instructions text
             const instructions = document.querySelector(".instructions")
-            instructions.textContent = "Select a position on enemy board to attack"
+            instructions.textContent = "All ships placed. Click on the button below to start the game"
             // Add class ".placed" to all user ships
             const userShips = document.querySelectorAll(".userShip")
             userShips.forEach(ship => {
                 
                 ship.classList.add("placed")
                 ship.classList.remove("selected")
+                ship.classList.remove("no-hover")
             
             })
-            // Delete property "cursor: pointer" from user board squares
-            const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
-            // eslint-disable-next-line no-param-reassign
-            userBoardSquares.forEach(square => {square.style.cursor = "default"})
+            
             // Revert global variables to default values
             selectedShipName = ""
             selectedShipLength = 0
-            // Change global variable userGameboardStatus
-            userGameboardStatus = "blocked"
+            
+            // Block user gameboard
+            const userGameboardGrid = getElement("userGameboardGrid")
+            userGameboardGrid.classList.add("blocked")
+
+            // Show "Start Game" button
+            showStartGameButton()
 
         })
 
@@ -636,7 +669,7 @@ export let view = (function() {
 
         // Main content
         const glowingButton = createElement("button","glowing-button",null)
-        glowingButton.textContent = "START"
+        glowingButton.textContent = "PLAY"
         glowingButton.addEventListener("click", () => {
             deleteMainUI()
             loadMainUICallback()
@@ -689,14 +722,6 @@ export let view = (function() {
 
     }
 
-    // Shows an error in "instructions" div
-    function showUserError(error) {
-
-        const instructions = document.querySelector(".instructions")
-        instructions.textContent = error
-
-    }
-
     // Change background color of the squares passed as argument
     function updateUserGameboardShipPlacement(arrayOfSquares) {
 
@@ -706,6 +731,37 @@ export let view = (function() {
             userBoardSquare.classList.add("occupied")
 
         })
+
+    }
+
+    // Updates user shipyard when a ship is placed
+    function updateUserShipyard(shipName) {
+
+        const shipDiv = document.querySelector(`.${shipName}`)
+        shipDiv.classList.add("placed")
+        shipDiv.classList.remove("selected")
+
+        // Update global variables
+        selectedShipLength = 0
+        selectedShipName = ""
+        placedShipsCounter += 1
+
+        // If all ships are placed,
+        // show the "Start Game" button, 
+        // update info and block user gameboard
+        if (placedShipsCounter === 5) {
+
+            // Block user gameboard
+            const userGameboardGrid = getElement("userGameboardGrid")
+            userGameboardGrid.classList.add("blocked")
+            // Change instructions text
+            const instructions = document.querySelector(".instructions")
+            instructions.textContent = "All ships placed. Click on the button below to start the game"
+
+            // Show "Start Game" button
+            showStartGameButton()
+
+        }
 
     }
 
@@ -719,8 +775,9 @@ export let view = (function() {
         loadGameUI,
         deleteUserGameboardEventListeners,
         onManualPlacementClick,
-        showUserError,
-        updateUserGameboardShipPlacement
+        showUserInfo,
+        updateUserGameboardShipPlacement,
+        updateUserShipyard
     }
 
 })()

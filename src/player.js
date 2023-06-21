@@ -117,11 +117,11 @@ const Player = (type) => {
         if (res.success) {
             
             deleteShipByName(shipName)
-            return { success: "Ship placed!", squares: res.data }
+            return { success: "Ship placed", squares: res.data }
 
         }
         
-        return { error: "Invalid ship placement!" }
+        return { error: "Invalid ship placement" }
 
     }
 
