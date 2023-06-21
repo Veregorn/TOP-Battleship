@@ -454,6 +454,11 @@ export let view = (function() {
         instructions.textContent = "Select a placement option for your ships"
         userSide.appendChild(instructions)
 
+        // Create a div to show info from the IA player
+        const computerInfo = createElement("div","computerInfo",null)
+        computerInfo.textContent = "My ships has been placed. I'm waiting for you to start..."
+        computerSide.appendChild(computerInfo)
+
         // Create a div to show buttons to the user
         const buttonsContainer = createElement("div","buttonsContainer",null)
         userSide.appendChild(buttonsContainer)
@@ -475,6 +480,21 @@ export let view = (function() {
             square.addEventListener("click", () => {
                 if (!userGameboardGrid.classList.contains("blocked")) {
                     callback(parseInt(square.getAttribute("data-index"),10), selectedShipName, orientation)
+                }
+            })
+        })
+
+    }
+
+    // Associates an event listener to every cell of the computer board
+    function onComputerBoardClick(callback) {
+
+        const computerGameboardGrid = getElement("computerGameboardGrid")
+        const computerBoardSquares = document.querySelectorAll("#computerGameboardGrid .gameboardSquare")
+        computerBoardSquares.forEach(square => {
+            square.addEventListener("click", () => {
+                if (!computerGameboardGrid.classList.contains("blocked")) {
+                    callback(parseInt(square.getAttribute("data-index"),10))
                 }
             })
         })
@@ -592,6 +612,10 @@ export let view = (function() {
             // Change instructions text
             const instructions = document.querySelector(".instructions")
             instructions.textContent = "Click on a cell to attack"
+
+            // Change computer info text
+            const computerInfo = document.querySelector(".computerInfo")
+            computerInfo.textContent = "Ladies first, please..."
 
         })
 
@@ -717,7 +741,6 @@ export let view = (function() {
         // First remove the event listeners from the ships
         const userShips = document.querySelectorAll(".userShip")
         userShips.forEach(ship => {
-            console.log("Removing event listeners from ships")
             ship.removeEventListener("click", (event) => handleShipClick(ship,event))
         })
 
@@ -725,7 +748,6 @@ export let view = (function() {
         const userBoardSquares = document.querySelectorAll("#userGameboardGrid .gameboardSquare")
         userBoardSquares.forEach(square => {
             
-            console.log("Removing event listeners from squares")
             square.removeEventListener("click", () => {})
             square.removeEventListener("mouseover", () => {})
             square.removeEventListener("mouseout", () => {})
@@ -789,7 +811,8 @@ export let view = (function() {
         onManualPlacementClick,
         showUserInfo,
         updateUserGameboardShipPlacement,
-        updateUserShipyard
+        updateUserShipyard,
+        onComputerBoardClick
     }
 
 })()

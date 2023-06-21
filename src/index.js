@@ -47,6 +47,28 @@ function loadMainUI() {
 
     })
 
+    // Wait for user to click on a square to attack
+    view.onComputerBoardClick( (squareNum) => {
+
+        // Attack the square
+        const res = user.manualAttack(squareNum)
+
+        // If "manualAttack" returns an error, show it
+        if (res.error) {
+            view.showUserInfo(res.error)
+        }
+        else {
+        //    view.showComputerInfo(res.success) // Show success message
+        //    view.updateComputerGameboard(squareNum, res.hit) // Update computer board
+        // }
+
+        // Computer attacks
+        // const square = computer.generateAutoAttack()
+
+        }
+
+    })
+
 }
 
 // Create the interface and player objects

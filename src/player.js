@@ -150,7 +150,7 @@ const Player = (type) => {
 
         // Test if is valid attack
         if (!isValidAttack(square)) {
-            return { error: "Invalid attack!" }
+            return { error: "Invalid attack! That square was attacked yet" }
         }
 
         // Delete tha square from valid attacks array
