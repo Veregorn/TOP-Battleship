@@ -174,6 +174,7 @@ export let view = (function() {
         const userGameboard = createElement("div","gameboardGrid","userGameboardGrid")
         userGameboard.classList.add("blocked")
         const computerGameboard = createElement("div","gameboardGrid","computerGameboardGrid")
+        computerGameboard.classList.add("blocked")
 
         // Generate the gameboard squares
         for (let i = 0; i < 100; i += 1) {
@@ -580,6 +581,17 @@ export let view = (function() {
         const startGameButton = createElement("button", null, "start-game-button")
         startGameButton.textContent = "START GAME"
         startGameButton.addEventListener("click", () => {
+
+            // Delete "Start Game" button
+            startGameButton.remove()
+            
+            // Enable the computer board
+            const computerGameboardGrid = getElement("computerGameboardGrid")
+            computerGameboardGrid.classList.remove("blocked")
+
+            // Change instructions text
+            const instructions = document.querySelector(".instructions")
+            instructions.textContent = "Click on a cell to attack"
 
         })
 

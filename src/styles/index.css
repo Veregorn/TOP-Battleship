@@ -350,6 +350,11 @@ a:visited {
     background-color: #1b88e7;
 }
 
+#computerGameboardGrid.blocked .gameboardSquare:hover {
+    background-color: #a1dcff;
+    cursor: default;
+}
+
 /* SHIPYARD */
 
 .statusPanel {
