@@ -134,25 +134,36 @@ const Gameboard = () => {
     const receiveAttack = (squareNumber) => {
         
         const square = getSquare(squareNumber)
-        let result = ""
+        const result = {type: "", success: "", error: "", sunk: "", gameover: false}
 
         // Attack fails
         if (square === "Water") {
-            setSquare(squareNumber,"Miss")
-            result = "Missed attack!"
+            result.type = "Miss"
+            setSquare(squareNumber,result.type)
+            result.success = "Hahaha! Better luck next time!"
         } else if (square === "Miss" || square === "ShipHit") { // Invalid attack received
-            result = "This is an invalid attack"
+            result.error = "This square was already attacked!"
         } else { // Attack hits
             const damagedShip = findShip(square)
-            setSquare(squareNumber,"ShipHit")
+            result.type = "ShipHit"
+            setSquare(squareNumber,result.type)
             damagedShip.hit()
-            result = `A ${damagedShip.getName()} has been hit!`
+            result.success = "Arggh! You hit my ship!"
 
             // Need to test if ship is sunk
             if (damagedShip.isSunk()) {
+                
+                result.sunk = damagedShip.getName()
                 deleteShip(damagedShip.getName())
                 checkGameOver()
+
+                // If game is over, return that in the result
+                if (getGameOver()) {
+                    result.gameover = true
+                }
+
             }
+
         }
 
         return result

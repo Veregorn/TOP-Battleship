@@ -47,11 +47,19 @@ export let view = (function() {
         main.innerHTML = ""
     }
 
-    // Shows an error in "instructions" div
-    function showUserInfo(error) {
+    // Shows info in users "instructions" div
+    function showUserInfo(info) {
 
         const instructions = document.querySelector(".instructions")
-        instructions.textContent = error
+        instructions.textContent = info
+
+    }
+
+    // Shows info in computers "instructions" div
+    function showComputerInfo(info) {
+
+        const computerInfo = document.querySelector(".computerInfo")
+        computerInfo.textContent = info
 
     }
 
@@ -212,6 +220,7 @@ export let view = (function() {
 
         // Create the user shipyard
         const userCarrier = createElement("div","carrier","userCarrier")
+        userCarrier.classList.add("ship")
         userCarrier.classList.add("userShip")
         userCarrier.classList.add("no-hover")
         userCarrier.innerHTML = `
@@ -236,6 +245,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const userBattleship = createElement("div","battleship","userBattleship")
+        userBattleship.classList.add("ship")
         userBattleship.classList.add("userShip")
         userBattleship.classList.add("no-hover")
         userBattleship.innerHTML = `
@@ -273,6 +283,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const userDestroyer = createElement("div","destroyer","userDestroyer")
+        userDestroyer.classList.add("ship")
         userDestroyer.classList.add("userShip")
         userDestroyer.classList.add("no-hover")
         userDestroyer.innerHTML = `
@@ -296,6 +307,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const userSubmarine = createElement("div","submarine","userSubmarine")
+        userSubmarine.classList.add("ship")
         userSubmarine.classList.add("userShip")
         userSubmarine.classList.add("no-hover")
         userSubmarine.innerHTML = `
@@ -314,6 +326,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const userBoat = createElement("div","boat","userBoat")
+        userBoat.classList.add("ship")
         userBoat.classList.add("userShip")
         userBoat.classList.add("no-hover")
         userBoat.innerHTML = `
@@ -336,6 +349,7 @@ export let view = (function() {
 
         // Create the enemy shipyard
         const computerCarrier = createElement("div","carrier","computerCarrier")
+        computerCarrier.classList.add("ship")
         computerCarrier.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 188 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1.13728,0,0,0.751167,-14.2455,-0.759376)">
@@ -358,6 +372,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const computerBattleship = createElement("div","battleship","computerBattleship")
+        computerBattleship.classList.add("ship")
         computerBattleship.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 150 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1,0,0,1,-20.1628,-7.00741)">
@@ -393,6 +408,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const computerDestroyer = createElement("div","destroyer","computerDestroyer")
+        computerDestroyer.classList.add("ship")
         computerDestroyer.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1,0,0,1,-39.1628,-7.00741)">
@@ -414,6 +430,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const computerSubmarine = createElement("div","submarine","computerSubmarine")
+        computerSubmarine.classList.add("ship")
         computerSubmarine.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 112 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(1.06836,0,0,0.752001,-40.4103,-4.54153)">
@@ -430,6 +447,7 @@ export let view = (function() {
                 </g>
             </svg>`
         const computerBoat = createElement("div","boat","computerBoat")
+        computerBoat.classList.add("ship")
         computerBoat.innerHTML = `
             <svg width="100%" height="100%" viewBox="0 0 74 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <g transform="matrix(0.976973,0,0,0.752048,-7.06641,-4.56753)">
@@ -799,6 +817,31 @@ export let view = (function() {
 
     }
 
+    // Updates computer gameboard when an attack is made
+    function updateComputerGameboard(squareNum,attackResult) {
+
+        const computerBoardSquare = document.querySelector(`#computerGameboardGrid .gameboardSquare[data-index="${squareNum}"]`)
+
+        if (attackResult === "Miss") {
+
+            computerBoardSquare.classList.add("miss")
+
+        } else if (attackResult === "ShipHit") {
+
+            computerBoardSquare.classList.add("hit")
+
+        }
+
+    }
+
+    // Updates computer shipyard when a ship is sunk
+    function updateComputerShipyard(shipName) {
+
+        const shipDiv = document.querySelector(`#computerStatusPanel .${shipName}`)
+        shipDiv.classList.add("sunk")
+
+    }
+
     return {
         createElement,
         getElement,
@@ -812,7 +855,10 @@ export let view = (function() {
         showUserInfo,
         updateUserGameboardShipPlacement,
         updateUserShipyard,
-        onComputerBoardClick
+        onComputerBoardClick,
+        showComputerInfo,
+        updateComputerGameboard,
+        updateComputerShipyard
     }
 
 })()

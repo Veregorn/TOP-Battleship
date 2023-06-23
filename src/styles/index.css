@@ -355,6 +355,22 @@ a:visited {
     cursor: default;
 }
 
+.gameboardSquare.miss {
+    background-color: #c23434;
+}
+
+.gameboardSquare.miss:hover {
+    background-color: #c23434!important;
+}
+
+.gameboardSquare.hit {
+    background-color: #4CAF50;
+}
+
+.gameboardSquare.hit:hover {
+    background-color: #4CAF50!important;
+}
+
 /* SHIPYARD */
 
 .statusPanel {
@@ -416,6 +432,20 @@ a:visited {
 .userShip.placed {
     opacity: 1;
     cursor: default;
+}
+
+.ship.sunk {
+    position: relative;
+}
+
+.ship.sunk::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgb(231, 9, 9);
 }
 
 @keyframes glowing {

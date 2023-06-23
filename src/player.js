@@ -157,7 +157,7 @@ const Player = (type) => {
         deleteFromAvailableAttacks(getIndexOfAttack(square))
 
         // Return success msg
-        return {success: "Position attacked!"}
+        return {success: "Position attacked! "}
     }
 
     return {

@@ -1,6 +1,5 @@
 import "./styles/index.css"
 import { view } from "./view"
-import Gameboard from "./gameboard"
 import Player from "./player"
 
 // Function to load the main UI
@@ -56,16 +55,53 @@ function loadMainUI() {
         // If "manualAttack" returns an error, show it
         if (res.error) {
             view.showUserInfo(res.error)
+            view.showComputerInfo("")
         }
         else {
-        //    view.showComputerInfo(res.success) // Show success message
-        //    view.updateComputerGameboard(squareNum, res.hit) // Update computer board
-        // }
+
+            const attackRes = computer.getGameBoard().receiveAttack(squareNum) // Attack computer board
+
+            // If "receiveAttack" returns an error, show it
+            if (attackRes.error) {
+
+                view.showUserInfo(attackRes.error)
+                view.showComputerInfo("")
+
+            }
+            else { // If not, read the result
+
+                // If the attack was a hit, show it
+                if (attackRes.type === "ShipHit") {
+                    
+                    view.showUserInfo("You hit a ship!")
+                    view.showComputerInfo(attackRes.success)
+
+                    // If the ship was sunk, show it
+                    if (attackRes.sunk !== "") {
+
+                        view.showUserInfo("You sunk a ship!")
+                        view.showComputerInfo(`Oh no! my ${attackRes.sunk}!`)
+                        view.updateComputerShipyard(attackRes.sunk)
+
+                    }
+
+                }
+                else if (attackRes.type === "Miss") { // If not, show a miss
+
+                    view.showUserInfo("You missed!")
+                    view.showComputerInfo(attackRes.success)
+
+                }
+
+                // Update computer board
+                view.updateComputerGameboard(squareNum, attackRes.type)
+
+            }
+
+        }
 
         // Computer attacks
         // const square = computer.generateAutoAttack()
-
-        }
 
     })
 

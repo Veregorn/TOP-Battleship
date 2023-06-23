@@ -29,15 +29,15 @@ test("AI player generates a first attack and it's valid (from 0 to 99)", () => {
 
 test("Human player first attack success and square is deleted from valid attacks array", () => {
     const result = player1.manualAttack(50)
-    expect(result.success).toBe("Position attacked!")
+    expect(result.success).toBe("Position attacked! ")
     expect(player1.isValidAttack(50)).toBeFalsy()
 })
 
 test("Human player can't attack same square twice", () => {
     let result = player1.manualAttack(40)
-    expect(result.success).toBe("Position attacked!")
+    expect(result.success).toBe("Position attacked! ")
     result = player1.manualAttack(40)
-    expect(result.error).toBe("Invalid attack!")
+    expect(result.error).toBe("Invalid attack! That square was attacked yet")
 })
 
 test("When a player attacks a square, that square is deleted from available attacks array", () => {
@@ -52,7 +52,7 @@ test("Player type is set correctly", () => {
   
 test("Manual attack on an invalid square returns an error", () => {
     const result = player1.manualAttack(150)
-    expect(result.error).toBe("Invalid attack!")
+    expect(result.error).toBe("Invalid attack! That square was attacked yet")
 })
   
 test("Random direction is x or y", () => {
