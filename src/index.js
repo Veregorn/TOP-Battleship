@@ -83,6 +83,13 @@ function loadMainUI() {
                         view.showComputerInfo(`Oh no! my ${attackRes.sunk}!`)
                         view.updateComputerShipyard(attackRes.sunk)
 
+                        // If all ships are sunk, finish the game
+                        if (computer.getGameBoard().getGameOver()) {
+                            
+                            view.showVictoryModal("You")
+
+                        }
+
                     }
 
                 }

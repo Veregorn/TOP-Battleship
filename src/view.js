@@ -487,6 +487,20 @@ export let view = (function() {
         buttonsContainer.appendChild(manualButton)
         buttonsContainer.appendChild(randomButton)
 
+        // Create a div to show a modal window announcing the end of the game
+        const modal = createElement("div",null,"victoryModal")
+        const modalContent = createElement("div",null,null)
+        const modalText = createElement("p", null, "modal-text")
+        const restartButton = createElement("button",null,"modal-button")
+        restartButton.textContent = "Restart"
+        restartButton.addEventListener("click", () => {
+            document.location.reload()
+        })
+        modalContent.appendChild(modalText)
+        modalContent.appendChild(restartButton)
+        modal.appendChild(modalContent)
+        main.appendChild(modal)
+
     }
 
     // Associates an event listener to every cell of the user board
@@ -842,6 +856,16 @@ export let view = (function() {
 
     }
 
+    // Shows a modal window announcing the winner and a button to restart the game
+    function showVictoryModal(winner) {
+
+        const modal = getElement("victoryModal")
+        modal.style.display = "block"
+        const modalText = getElement("modal-text")
+        modalText.textContent = `${winner} wins!`
+
+    }
+
     return {
         createElement,
         getElement,
@@ -858,7 +882,8 @@ export let view = (function() {
         onComputerBoardClick,
         showComputerInfo,
         updateComputerGameboard,
-        updateComputerShipyard
+        updateComputerShipyard,
+        showVictoryModal
     }
 
 })()
