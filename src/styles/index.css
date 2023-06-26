@@ -73,7 +73,7 @@ a:visited {
 /* HEADER */
 
 #header {
-    height: 10%;
+    height: 5%;
     background-color: #474747;
     display: flex;
     border-bottom: solid 1px #000;
@@ -90,7 +90,7 @@ a:visited {
 
 #main {
     position: relative;
-    height: 80%;
+    height: 85%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -364,7 +364,7 @@ a:visited {
 }
 
 .gameboardSquare.hit {
-    background-color: #4CAF50;
+    background-color: #4CAF50!important;
 }
 
 .gameboardSquare.hit:hover {
