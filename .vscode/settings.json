@@ -5,5 +5,8 @@
         "Gameboard",
         "gameover",
         "Hahaha"
-    ]
+    ],
+    "oneDarkPro.editorTheme": "One Dark Pro Darker",
+    "oneDarkPro.vivid": true,
+    "oneDarkPro.bold": true
 }

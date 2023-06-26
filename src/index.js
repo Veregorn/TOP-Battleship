@@ -107,8 +107,57 @@ function loadMainUI() {
 
         }
 
-        // Computer attacks
-        // const square = computer.generateAutoAttack()
+        // Its computer turn - Block computer board
+        view.toggleComputerBoardStatus()
+        const square = computer.generateAutoAttack()
+        const attackRes = user.getGameBoard().receiveAttack(square)
+
+        // If "receiveAttack" returns an error, show it
+        if (attackRes.error) {
+
+            view.showComputerInfo(attackRes.error)
+            view.showUserInfo("")
+
+        }
+        else { // If not, read the result
+
+            // If the attack was a hit, show it
+            if (attackRes.type === "ShipHit") {
+
+                view.showComputerInfo("I hit a ship!")
+                view.showUserInfo("Oh no! One of your ships has been hit!")
+
+                // If the ship was sunk, show it
+                if (attackRes.sunk !== "") {
+
+                    view.showComputerInfo("I sunk a ship!")
+                    view.showUserInfo(`Your ${attackRes.sunk} is sunk now!`)
+                    view.updateUserShipyardAfterComputerAttack(attackRes.sunk)
+
+                    // If all ships are sunk, finish the game
+                    if (user.getGameBoard().getGameOver()) {
+
+                        view.showVictoryModal("Computer")
+
+                    }
+
+                }
+
+            }
+            else if (attackRes.type === "Miss") { // If not, show a miss
+
+                view.showComputerInfo("I missed!")
+                view.showUserInfo("Phew! That was close!")
+
+            }
+
+            // Update user board
+            view.updateUserGameboard(square, attackRes.type)
+
+        }
+
+        // Its user turn - Unblock computer board
+        view.toggleComputerBoardStatus()
 
     })
 

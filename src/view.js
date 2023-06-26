@@ -503,6 +503,34 @@ export let view = (function() {
 
     }
 
+    // Toggle computer board status between blocked and unblocked
+    function toggleComputerBoardStatus() {
+        
+        const computerGameboardGrid = getElement("computerGameboardGrid")
+        
+        if (computerGameboardGrid.classList.contains("blocked")) {
+            computerGameboardGrid.classList.remove("blocked")
+        }
+        else {
+            computerGameboardGrid.classList.add("blocked")
+        }
+
+    }
+
+    // Toggle user board status between blocked and unblocked
+    function toggleUserBoardStatus() {
+
+        const userGameboardGrid = getElement("userGameboardGrid")
+
+        if (userGameboardGrid.classList.contains("blocked")) {
+            userGameboardGrid.classList.remove("blocked")
+        }
+        else {
+            userGameboardGrid.classList.add("blocked")
+        }
+
+    }
+
     // Associates an event listener to every cell of the user board
     function onUserBoardClick(callback) {
 
@@ -545,8 +573,7 @@ export let view = (function() {
             randomButton.remove()
 
             // Change gameboard status
-            const userGameboardGrid = getElement("userGameboardGrid")
-            userGameboardGrid.classList.remove("blocked")
+            toggleUserBoardStatus() // Block user board
             
             // Change instructions text
             const instructions = document.querySelector(".instructions")
@@ -638,8 +665,7 @@ export let view = (function() {
             startGameButton.remove()
             
             // Enable the computer board
-            const computerGameboardGrid = getElement("computerGameboardGrid")
-            computerGameboardGrid.classList.remove("blocked")
+            toggleComputerBoardStatus()
 
             // Change instructions text
             const instructions = document.querySelector(".instructions")
@@ -685,8 +711,7 @@ export let view = (function() {
             selectedShipLength = 0
             
             // Block user gameboard
-            const userGameboardGrid = getElement("userGameboardGrid")
-            userGameboardGrid.classList.add("blocked")
+            toggleUserBoardStatus()
 
             // Show "Start Game" button
             showStartGameButton()
@@ -818,8 +843,7 @@ export let view = (function() {
         if (placedShipsCounter === 5) {
 
             // Block user gameboard
-            const userGameboardGrid = getElement("userGameboardGrid")
-            userGameboardGrid.classList.add("blocked")
+            toggleUserBoardStatus()
             // Change instructions text
             const instructions = document.querySelector(".instructions")
             instructions.textContent = "All ships placed. Click on the button below to start the game"
@@ -848,10 +872,35 @@ export let view = (function() {
 
     }
 
+    // Updates user gameboard when an attack is made
+    function updateUserGameboard(squareNum,attackResult) {
+
+        const userBoardSquare = document.querySelector(`#userGameboardGrid .gameboardSquare[data-index="${squareNum}"]`)
+
+        if (attackResult === "Miss") {
+
+            userBoardSquare.classList.add("miss")
+
+        } else if (attackResult === "ShipHit") {
+
+            userBoardSquare.classList.add("hit")
+
+        }
+
+    }
+
     // Updates computer shipyard when a ship is sunk
     function updateComputerShipyard(shipName) {
 
         const shipDiv = document.querySelector(`#computerStatusPanel .${shipName}`)
+        shipDiv.classList.add("sunk")
+
+    }
+
+    // Updates user shipyard when a ship is sunk
+    function updateUserShipyardAfterComputerAttack(shipName) {
+
+        const shipDiv = document.querySelector(`#userStatusPanel .${shipName}`)
         shipDiv.classList.add("sunk")
 
     }
@@ -883,7 +932,11 @@ export let view = (function() {
         showComputerInfo,
         updateComputerGameboard,
         updateComputerShipyard,
-        showVictoryModal
+        showVictoryModal,
+        toggleComputerBoardStatus,
+        toggleUserBoardStatus,
+        updateUserShipyardAfterComputerAttack,
+        updateUserGameboard
     }
 
 })()
