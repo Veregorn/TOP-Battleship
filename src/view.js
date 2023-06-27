@@ -766,6 +766,9 @@ export let view = (function() {
         glowingButton.addEventListener("click", () => {
             deleteMainUI()
             loadMainUICallback()
+            screen.style.position = "absolute" // To enable scrolling
+            screen.style.setProperty("height","initial")
+            main.style.alignItems = "flex-start" // To enable scrolling
         })
         main.appendChild(glowingButton)
 
@@ -911,7 +914,12 @@ export let view = (function() {
         const modal = getElement("victoryModal")
         modal.style.display = "block"
         const modalText = getElement("modal-text")
-        modalText.textContent = `${winner} wins!`
+        
+        if (winner === "Computer") {
+            modalText.textContent = `${winner} wins!`
+        } else {
+            modalText.textContent = `${winner} win!`
+        }
 
     }
 
