@@ -170,6 +170,25 @@ const Gameboard = () => {
 
     }
 
+    // Returns the length of the shortest ship in the board
+    const getShortestShipLengthInGame = () => {
+
+        let shortestShipLength = getShips()[0].getLength() // Set the shortest ship length to the first ship length
+
+        // Loop through the ships array
+        for (let i = 1; i < getShips().length; i += 1) {
+
+            // If the current ship length is shorter than the shortest ship length, update the shortest ship length
+            if (getShips()[i].getLength() < shortestShipLength) {
+                shortestShipLength = getShips()[i].getLength()
+            }
+
+        }
+
+        return shortestShipLength
+
+    }
+
     return {
         getGameOver,
         getSquare,
@@ -177,7 +196,8 @@ const Gameboard = () => {
         findShip,
         receiveAttack,
         getShips,
-        getBoard
+        getBoard,
+        getShortestShipLengthInGame
     }
 
 }

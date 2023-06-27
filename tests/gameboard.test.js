@@ -223,3 +223,34 @@ test("A ship can be placed in a corner", () => {
     // The ship is a Battleship
     expect(myBoard.getShips()[0].getName()).toBe("battleship")
 })
+
+// "getShortestShipLengthInGame" method
+test("With all the ships in the board, the shortest ship length is 2", () => {
+    const carrier = Ship("carrier")
+    const battleship = Ship("battleship")
+    const cruiser = Ship("destroyer")
+    const submarine = Ship("submarine")
+    const boat = Ship("boat")
+    myBoard.placeShip(carrier,10,"x")
+    myBoard.placeShip(battleship,20,"x")
+    myBoard.placeShip(cruiser,30,"x")
+    myBoard.placeShip(submarine,40,"x")
+    myBoard.placeShip(boat,50,"x")
+    expect(myBoard.getShortestShipLengthInGame()).toBe(2)
+})
+
+test("If a remove a boat, the shortest ship length is 3", () => {
+    const carrier = Ship("carrier")
+    const battleship = Ship("battleship")
+    const cruiser = Ship("destroyer")
+    const submarine = Ship("submarine")
+    const boat = Ship("boat")
+    myBoard.placeShip(carrier,10,"x")
+    myBoard.placeShip(battleship,20,"x")
+    myBoard.placeShip(cruiser,30,"x")
+    myBoard.placeShip(submarine,40,"x")
+    myBoard.placeShip(boat,50,"x")
+    myBoard.receiveAttack(50)
+    myBoard.receiveAttack(51)
+    expect(myBoard.getShortestShipLengthInGame()).toBe(3)
+})
