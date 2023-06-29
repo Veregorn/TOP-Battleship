@@ -157,6 +157,9 @@ function loadMainUI() {
 
             }
 
+            // Inform computer about the attack so it can update its strategy
+            computer.updateStrategy(computerAttackRes)
+
             // Its user turn - Unblock computer board
             view.toggleComputerBoardStatus()
 

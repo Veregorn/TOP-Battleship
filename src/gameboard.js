@@ -3,7 +3,7 @@ const Gameboard = () => {
 
     const _board = Array(100).fill("Water") // Array of 100 squares representing the game board
     const _ships = [] // Array of ships on the board
-    let _gameover = false
+    let _gameover = false // Boolean to check if the game is over
 
     // Get the board array
     const getBoard = () => _board

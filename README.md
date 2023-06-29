@@ -6,13 +6,17 @@ The game is displayed in two 10x10 squared game boards, one for each player. On 
 
 ## Types os Ships
 No.	  Class of ship   Size
-1	    Carrier	        5
-2	    Battleship	    4
-3	    Destroyer	      3
-4	    Submarine	      3
-5	    Patrol Boat	    2
+1	  Carrier	        5
+2	  Battleship	    4
+3	  Destroyer	        3
+4	  Submarine	        3
+5	  Patrol Boat	    2
 
 ## Development Info
 Design Pattern: Modules and Factory Functions
 Webpack for file and resources management
 Tests Drive Development Applied
+
+## IA Info
+I have used a hunt and target strategy for a non human player. Details are explained at this source:
+http://www.datagenetics.com/blog/december32011/

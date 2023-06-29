@@ -75,3 +75,19 @@ test("Delete a ship by name. Find this ship by name and not exist", () => {
     const ship = player1.getShipByName("Carrier")
     expect(ship).toBeNull()
 })
+
+// Attack mode tests
+test("Attack mode is set correctly when a ship is hit but isn't sunk", () => {
+    const mode = player1.updateStrategy({type: "ShipHit",sunk: ""})
+    expect(mode).toBe("target")
+})
+
+test("Attack mode is set correctly when an attack miss", () => {
+    const mode = player1.updateStrategy({type: "Miss"})
+    expect(mode).toBe("hunt")
+})
+
+test("Attack mode is set correctly when a ship is hit and sunk", () => {
+    const mode = player1.updateStrategy({type: "ShipHit",sunk: "Carrier"})
+    expect(mode).toBe("hunt")
+})
