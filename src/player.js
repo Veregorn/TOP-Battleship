@@ -8,6 +8,15 @@ const Player = (type) => {
     const _type = type // Possible values: "Human" or "AI"
     const _ships = [Ship("carrier"),Ship("battleship"),Ship("destroyer"),Ship("submarine"),Ship("boat")] // Array of ships a player is provided with
     const _availableAttacks = Array.from({length: 100}, (_, index) => index) // Creates an array from 0 to 99
+    let _attackMode = "hunt" // "hunt" or "target"
+    const _attacksStack = [] // Stack of attacks to be performed in "target" mode
+    let _lastAttack = null // Last attack performed by the player
+
+    // Gets last attack performed by the player
+    const getLastAttack = () => _lastAttack
+
+    // Sets last attack performed by the player
+    const setLastAttack = (square) => _lastAttack = square
 
     // Gets the game board
     const getGameBoard = () => _gameBoard
@@ -126,8 +135,8 @@ const Player = (type) => {
     }
 
     // Generates a random index from that array of available attacks
-    const generateRandomIndex = () => 
-        Math.floor(Math.random() * getAvailableAttacks().length)
+    const generateRandomIndex = (myArray) => 
+        Math.floor(Math.random() * myArray.length)
 
     // When we attack a position in enemy's board 
     // we need to delete it from available attacks to not repeat it in the future
@@ -135,13 +144,63 @@ const Player = (type) => {
         _availableAttacks.splice(index,1)
     }
 
+    // Gets attack mode
+    const getAttackMode = () => _attackMode
+
+    // Adds a square to the attacks stack
+    const addToAttacksStack = (square) => _attacksStack.push(square)
+
+    // Updates attacks stack
+    const updateAttacksStack = (square) => {
+
+        // Try to add top neighbour square to the stack
+        if (square - 10 >= 0 && isValidAttack(square - 10)) addToAttacksStack(square - 10)
+
+        // Try to add bottom neighbour square to the stack
+        if (square + 10 <= 99 && isValidAttack(square + 10)) addToAttacksStack(square + 10)
+
+        // Try to add left neighbour square to the stack
+        if (square % 10 !== 0 && isValidAttack(square - 1)) addToAttacksStack(square - 1)
+
+        // Try to add right neighbour square to the stack
+        if (square % 10 !== 9 && isValidAttack(square + 1)) addToAttacksStack(square + 1)
+
+    }
+
+
     // Generates a square to attack
     const generateAutoAttack = () => {
+        
+        // Variables
+        let square = null
+        let index = null
+
+        // If we are in "hunt" mode and the "boat" ship is not sunk, generate a random attack but only for odd squares
+        if (getAttackMode() === "hunt" && getGameBoard().getShortestShipLengthInGame() === 2) {
             
-            const index = generateRandomIndex()
-            const square = getAttackAtPos(index)
+            index = generateRandomIndex(getAvailableAttacks().filter((n) => n % 2 !== 0))
+            square = getAttackAtPos(index)
             deleteFromAvailableAttacks(index)
-            return square
+
+        }
+        else if (getAttackMode() === "hunt") { // The boat ship is sunk, so we need another strategy (working on it)
+
+            index = generateRandomIndex(getAvailableAttacks()) // Modify this line to implement a new strategy
+            square = getAttackAtPos(index)
+            deleteFromAvailableAttacks(index)
+
+        }
+        else { // We are in "target" mode
+
+            // Get the last attack
+
+        }
+
+        // Set last attack
+        setLastAttack(square)
+        
+        // Return the square to attack
+        return square
 
     }
 
@@ -160,6 +219,37 @@ const Player = (type) => {
         return {success: "Position attacked! "}
     }
 
+    // Toggle attack mode
+    const setAttackModeTo = (mode) => {
+        
+        _attackMode = mode
+
+    }
+
+    // updates attack strategy and returns it
+    const updateStrategy = (attackResult) => {
+
+        let attackMode = ""
+
+        // If the attack was a hit, I need to change the attack mode to "target"
+        if (attackResult.type === "ShipHit") {
+            
+            attackMode = "target"
+            // If the ship was sunk, I need to change the attack mode to "hunt"
+            if (attackResult.sunk !== "") {
+                attackMode = "hunt"
+            }
+        }
+        // If the attack was a miss, I need to change the attack mode to "hunt"
+        else if (attackResult.type === "Miss") {
+            attackMode = "hunt"
+        }
+
+        setAttackModeTo(attackMode)
+        return attackMode
+
+    }
+
     return {
         getGameBoard,
         placeShipsRandomly,
@@ -171,7 +261,8 @@ const Player = (type) => {
         getRandomDirection,
         placeShip,
         getShipByName,
-        deleteShipByName
+        deleteShipByName,
+        updateStrategy
     }
 
 }
