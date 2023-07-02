@@ -142,9 +142,13 @@ const Gameboard = () => {
             setSquare(squareNumber,result.type)
             result.success = "Hahaha! Better luck next time!"
         } else if (square === "Miss" || square === "ShipHit") { // Invalid attack received
-            result.error = "This square was already attacked!"
+            result.error = `This square was already attacked! ${squareNumber}` // Crisis
         } else { // Attack hits
             const damagedShip = findShip(square)
+            if (damagedShip.error) {
+                result.error = damagedShip.error
+                return result
+            }
             result.type = "ShipHit"
             setSquare(squareNumber,result.type)
             damagedShip.hit()

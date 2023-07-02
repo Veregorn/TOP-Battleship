@@ -16,7 +16,9 @@ const Player = (type) => {
     const getLastAttack = () => _lastAttack
 
     // Sets last attack performed by the player
-    const setLastAttack = (square) => _lastAttack = square
+    const setLastAttack = (square) => {
+        _lastAttack = square
+    }
 
     // Gets the game board
     const getGameBoard = () => _gameBoard
@@ -56,9 +58,6 @@ const Player = (type) => {
 
     // Gets the attacks array
     const getAvailableAttacks = () => _availableAttacks
-
-    // Gets the square at 'pos' in the '_availableAttacks' array
-    const getAttackAtPos = (pos) => _availableAttacks[pos]
 
     // Gets index of a square in the '_availableAttacks' array
     const getIndexOfAttack = (square) => _availableAttacks.indexOf(square)
@@ -134,14 +133,34 @@ const Player = (type) => {
 
     }
 
-    // Generates a random index from that array of available attacks
-    const generateRandomIndex = (myArray) => 
-        Math.floor(Math.random() * myArray.length)
+    // Returns a random element from an array
+    const getRandomElement = (myArray) => {
+
+        const index = Math.floor(Math.random() * myArray.length)
+        return myArray[index]
+
+    } 
 
     // When we attack a position in enemy's board 
     // we need to delete it from available attacks to not repeat it in the future
-    const deleteFromAvailableAttacks = (index) => {
-        _availableAttacks.splice(index,1)
+    const deleteFromAvailableAttacks = (square) => {
+        
+        const res = { success: null, error: null}
+        
+        if (!isValidAttack(square)) {
+            
+            res.error = `Error deleting square number ${square} from available attacks` // There is no square with that number in the array
+
+        } else {
+
+            const index = getIndexOfAttack(square)
+            _availableAttacks.splice(index,1)
+            res.success = `Square number ${square} deleted from available attacks`
+
+        }
+
+        return res
+
     }
 
     // Gets attack mode
@@ -150,20 +169,46 @@ const Player = (type) => {
     // Adds a square to the attacks stack
     const addToAttacksStack = (square) => _attacksStack.push(square)
 
+    // Retrieve a square from the attacks stack
+    const getFromAttacksStack = () => _attacksStack.pop()
+
+    // Returns true if the attacks stack is empty
+    const isAttacksStackEmpty = () => _attacksStack.length === 0
+
     // Updates attacks stack
     const updateAttacksStack = (square) => {
 
         // Try to add top neighbour square to the stack
-        if (square - 10 >= 0 && isValidAttack(square - 10)) addToAttacksStack(square - 10)
+        if (square - 10 >= 0 && isValidAttack(square - 10)) {
+
+            addToAttacksStack(square - 10)
+            deleteFromAvailableAttacks(square - 10)
+
+        }
 
         // Try to add bottom neighbour square to the stack
-        if (square + 10 <= 99 && isValidAttack(square + 10)) addToAttacksStack(square + 10)
+        if (square + 10 <= 99 && isValidAttack(square + 10)) {
+
+            addToAttacksStack(square + 10)
+            deleteFromAvailableAttacks(square + 10)
+
+        }
 
         // Try to add left neighbour square to the stack
-        if (square % 10 !== 0 && isValidAttack(square - 1)) addToAttacksStack(square - 1)
+        if (square % 10 !== 0 && isValidAttack(square - 1)) {
+
+            addToAttacksStack(square - 1)
+            deleteFromAvailableAttacks(square - 1)
+
+        }
 
         // Try to add right neighbour square to the stack
-        if (square % 10 !== 9 && isValidAttack(square + 1)) addToAttacksStack(square + 1)
+        if (square % 10 !== 9 && isValidAttack(square + 1)) {
+                
+                addToAttacksStack(square + 1)
+                deleteFromAvailableAttacks(square + 1)
+    
+        }
 
     }
 
@@ -173,26 +218,41 @@ const Player = (type) => {
         
         // Variables
         let square = null
-        let index = null
+        let res = { success: null, error: null }
 
         // If we are in "hunt" mode and the "boat" ship is not sunk, generate a random attack but only for odd squares
         if (getAttackMode() === "hunt" && getGameBoard().getShortestShipLengthInGame() === 2) {
             
-            index = generateRandomIndex(getAvailableAttacks().filter((n) => n % 2 !== 0))
-            square = getAttackAtPos(index)
-            deleteFromAvailableAttacks(index)
+            square = getRandomElement(getAvailableAttacks().filter((n) => n % 2 !== 0))
+
+            // Delete the square from the available attacks array
+            res = deleteFromAvailableAttacks(square)
 
         }
         else if (getAttackMode() === "hunt") { // The boat ship is sunk, so we need another strategy (working on it)
 
-            index = generateRandomIndex(getAvailableAttacks()) // Modify this line to implement a new strategy
-            square = getAttackAtPos(index)
-            deleteFromAvailableAttacks(index)
+            square = getRandomElement(getAvailableAttacks()) // Modify this line to implement a new strategy
+
+            // Delete the square from the available attacks array
+            res = deleteFromAvailableAttacks(square)
 
         }
         else { // We are in "target" mode
 
-            // Get the last attack
+            // Gets a square from the attacks stack
+            square = getFromAttacksStack()
+
+        }
+
+        if (res.error) {
+
+            console.log(res.error)
+
+        }
+
+        if (res.success) {
+
+            console.log(res.success)
 
         }
 
@@ -213,7 +273,18 @@ const Player = (type) => {
         }
 
         // Delete tha square from valid attacks array
-        deleteFromAvailableAttacks(getIndexOfAttack(square))
+        const res = deleteFromAvailableAttacks(square)
+
+        if (res.error) {
+
+            console.log(res.error)
+
+        }
+        else {
+
+            console.log(res.success)
+
+        }
 
         // Return success msg
         return {success: "Position attacked! "}
@@ -235,14 +306,23 @@ const Player = (type) => {
         if (attackResult.type === "ShipHit") {
             
             attackMode = "target"
-            // If the ship was sunk, I need to change the attack mode to "hunt"
-            if (attackResult.sunk !== "") {
-                attackMode = "hunt"
-            }
+
+            // Attacks Stacks needs to be updated
+            updateAttacksStack(getLastAttack())
+
         }
-        // If the attack was a miss, I need to change the attack mode to "hunt"
-        else if (attackResult.type === "Miss") {
-            attackMode = "hunt"
+        else if (attackResult.type === "Miss") { // If the attack was a miss, check the stack
+                
+                // If the stack is not empty, I need to change the attack mode to "target"
+                if (!isAttacksStackEmpty()) {
+                    attackMode = "target"
+                }
+
+                // If the stack is empty, I need to change the attack mode to "hunt"
+                else {
+                    attackMode = "hunt"
+                }
+
         }
 
         setAttackModeTo(attackMode)

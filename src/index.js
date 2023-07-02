@@ -105,65 +105,70 @@ function loadMainUI() {
 
         }
 
-        // Its computer turn - Block computer board
-        view.toggleComputerBoardStatus()
-        // Delay computer attack for 3 seconds to simulate thinking
-        setTimeout( () => {
+        // If game is not over, let computer attack
+        if (!computer.getGameBoard().getGameOver()) {
+            
+            // Its computer turn - Block computer board
+            view.toggleComputerBoardStatus()
+            // Delay computer attack for 3 seconds to simulate thinking
+            setTimeout( () => {
 
-            const square = computer.generateAutoAttack()
-            const computerAttackRes = user.getGameBoard().receiveAttack(square)
+                const square = computer.generateAutoAttack()
+                const computerAttackRes = user.getGameBoard().receiveAttack(square)
 
-            // If "receiveAttack" returns an error, show it
-            if (computerAttackRes.error) {
+                // If "receiveAttack" returns an error, show it
+                if (computerAttackRes.error) {
 
-                view.showComputerInfo(computerAttackRes.error)
-                view.showUserInfo("")
+                    view.showComputerInfo(computerAttackRes.error)
+                    view.showUserInfo("")
 
-            }
-            else { // If not, read the result
+                }
+                else { // If not, read the result
 
-                // If the attack was a hit, show it
-                if (computerAttackRes.type === "ShipHit") {
+                    // If the attack was a hit, show it
+                    if (computerAttackRes.type === "ShipHit") {
 
-                    view.showComputerInfo("I hit a ship!")
-                    view.showUserInfo("Oh no! One of your ships has been hit!")
+                        view.showComputerInfo("I hit a ship!")
+                        view.showUserInfo("Oh no! One of your ships has been hit!")
 
-                    // If the ship was sunk, show it
-                    if (computerAttackRes.sunk !== "") {
+                        // If the ship was sunk, show it
+                        if (computerAttackRes.sunk !== "") {
 
-                        view.showComputerInfo("I sunk a ship!")
-                        view.showUserInfo(`Your ${computerAttackRes.sunk} is sunk now!`)
-                        view.updateUserShipyardAfterComputerAttack(computerAttackRes.sunk)
+                            view.showComputerInfo("I sunk a ship!")
+                            view.showUserInfo(`Your ${computerAttackRes.sunk} is sunk now!`)
+                            view.updateUserShipyardAfterComputerAttack(computerAttackRes.sunk)
 
-                        // If all ships are sunk, finish the game
-                        if (user.getGameBoard().getGameOver()) {
+                            // If all ships are sunk, finish the game
+                            if (user.getGameBoard().getGameOver()) {
 
-                            view.showVictoryModal("Computer")
+                                view.showVictoryModal("Computer")
+
+                            }
 
                         }
 
                     }
+                    else if (computerAttackRes.type === "Miss") { // If not, show a miss
+
+                        view.showComputerInfo("I missed!")
+                        view.showUserInfo("Phew! That was close!")
+
+                    }
+
+                    // Update user board
+                    view.updateUserGameboard(square, computerAttackRes.type)
 
                 }
-                else if (computerAttackRes.type === "Miss") { // If not, show a miss
 
-                    view.showComputerInfo("I missed!")
-                    view.showUserInfo("Phew! That was close!")
+                // Inform computer about the attack so it can update its strategy
+                computer.updateStrategy(computerAttackRes)
 
-                }
+                // Its user turn - Unblock computer board
+                view.toggleComputerBoardStatus()
 
-                // Update user board
-                view.updateUserGameboard(square, computerAttackRes.type)
+            }, 3000)
 
-            }
-
-            // Inform computer about the attack so it can update its strategy
-            computer.updateStrategy(computerAttackRes)
-
-            // Its user turn - Unblock computer board
-            view.toggleComputerBoardStatus()
-
-        }, 3000)
+        }
 
     })
 
