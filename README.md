@@ -20,3 +20,10 @@ Tests Drive Development Applied
 ## IA Info
 I have used a hunt and target strategy for a non human player. Details are explained at this source:
 http://www.datagenetics.com/blog/december32011/
+
+## Future Improvements to be Implemented
+Implement "Probability Density Functions" like suggested in [Data Genetics](http://www.datagenetics.com/blog/december32011/)
+
+ Create a 2 player option that lets users take turns by passing the device back and forth
+
+ Implement Drag & Drop ship placement
